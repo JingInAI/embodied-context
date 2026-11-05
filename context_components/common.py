@@ -277,7 +277,6 @@ class Services:
 class Invocation:
     def __init__(self, component, request, services=None):
         validate(request, 'input')
-        validate(request['input'], component=component)
         self.component, self.request = component, copy.deepcopy(request)
         self.services = services or Services()
         if type(self.services.max_records) is not int or self.services.max_records < 1:
@@ -298,7 +297,6 @@ class Invocation:
                         reference_closure(item)
             elif isinstance(value,list):
                 for item in value:reference_closure(item)
-        reference_closure(self.input)
         self.issues, self.upstream = [], []
         self.history = self.request.get('history')
         self.state_value = None
@@ -353,6 +351,14 @@ class Invocation:
                 fail('identity_mismatch', 'Context ID reused for different bytes')
             if not prior:
                 self.upstream.append(copy.deepcopy(context))
+        from .task_modes import combine, context_kind, request_kind, select_variant
+        self.task_kind = combine([request_kind(self.request), *map(context_kind, self.upstream)])
+        # Resolve referenced upstream once for composition preflight and later use.
+        if self.upstream:
+            self.request['upstream'] = [dict(context=copy.deepcopy(c)) for c in self.upstream]
+        self.request = select_variant(component, self.request, self.task_kind)
+        self.input = self.request['input']
+        reference_closure(self.input)
 
     def issue(self, code, message, path=''):
         self.issues.append(dict(code=code, path=path, message=message))
@@ -475,6 +481,10 @@ class Invocation:
         out = dict(schema_version='context.v1', component=self.component, payload_version='1',
                    context_id=uid('result'), scope=copy.deepcopy(self.scope),
                    status=status or ('partial' if self.issues else 'ready'), content=content)
+        if self.task_kind is not None:
+            from .task_modes import recommendation
+            out['task'] = dict(kind=self.task_kind)
+            out['guidance'] = [recommendation(self.component, self.task_kind)]
         if self.component == 'evidence_context':
             used.update(self.refs)
         if self.component == 'observation_context':
@@ -493,6 +503,8 @@ class Invocation:
             out['state_update'] = dict(base_state_id=self.history['state_id'] if self.history else None,
                 state=dict(state_id=uid('state'), owner=self.component, state_schema_version='1',
                            scope=copy.deepcopy(self.scope), bindings=copy.deepcopy(self.request.get('bindings', {})), value=state))
+        if self.task_kind is not None and 'state_update' in out:
+            out['state_update']['state']['task'] = dict(kind=self.task_kind)
         validate(out, 'output')
         budget=self.request.get('request',{}).get('budget',{})
         if len(dumps(out).encode('utf-8'))>budget.get('max_bytes',float('inf')):

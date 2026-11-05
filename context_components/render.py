@@ -67,7 +67,7 @@ def render_context(result, delivery_request, *, sources=None, tokenizers=None):
             blocks.append(dict(id=node['id']+':error',kind='text',text=render_error(node['error'],content_format),critical=True));continue
         context=node['result'];context_ids.append(context['context_id'])
         view=dict(component=context['component'],status=context['status'],content=context['content'])
-        for key in ('issues','guidance'):
+        for key in ('task','issues','guidance'):
             if key in context:view[key]=context[key]
         blocks.append(dict(id=node['id']+':context',kind='text',text=render_view(context,view,content_format),critical=True))
         aliases=[]

@@ -1,0 +1,108 @@
+{
+  "schema_version": "context.v1",
+  "scope": {
+    "run_id": "synthetic-kind-example",
+    "task_id": "compare-published-positions",
+    "epoch_id": "snapshot-1",
+    "turn_index": 0
+  },
+  "input": {
+    "task": {
+      "kind": "reasoning"
+    },
+    "frames": [
+      {
+        "id": "map",
+        "length_unit": "m",
+        "handedness": "right"
+      }
+    ],
+    "queries": [
+      {
+        "id": "base-position",
+        "kind": "transform",
+        "source_frame": "map",
+        "target_frame": "map",
+        "point": [
+          0,
+          0,
+          0
+        ]
+      }
+    ]
+  },
+  "request": {
+    "task_variants": {
+      "execution": {
+        "input": {
+          "queries": [
+            {
+              "id": "target-separation",
+              "kind": "distance",
+              "frame_id": "map",
+              "point_a": [
+                0,
+                0,
+                0
+              ],
+              "point_b": [
+                0.3,
+                0.4,
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "reasoning": {
+        "input": {
+          "queries": [
+            {
+              "id": "reported-position",
+              "kind": "transform",
+              "source_frame": "map",
+              "target_frame": "map",
+              "point": [
+                0.3,
+                0.4,
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "hybrid": {
+        "input": {
+          "queries": [
+            {
+              "id": "target-separation",
+              "kind": "distance",
+              "frame_id": "map",
+              "point_a": [
+                0,
+                0,
+                0
+              ],
+              "point_b": [
+                0.3,
+                0.4,
+                0
+              ]
+            },
+            {
+              "id": "reported-position",
+              "kind": "transform",
+              "source_frame": "map",
+              "target_frame": "map",
+              "point": [
+                0.3,
+                0.4,
+                0
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}

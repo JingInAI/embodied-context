@@ -817,6 +817,9 @@
             "minLength": 1
           },
           "minItems": 0
+        },
+        "task": {
+          "$ref": "urn:context-design:common:v1#/$defs/task_mode"
         }
       },
       "required": [],
@@ -928,6 +931,9 @@
             "type": "string",
             "minLength": 1
           }
+        },
+        "task": {
+          "$ref": "urn:context-design:common:v1#/$defs/task_mode"
         }
       },
       "required": [
@@ -990,6 +996,9 @@
         },
         "execution_semantics": {
           "type": "object"
+        },
+        "task": {
+          "$ref": "urn:context-design:common:v1#/$defs/task_mode"
         }
       },
       "required": [
@@ -1132,6 +1141,9 @@
             "additionalProperties": false
           },
           "minItems": 0
+        },
+        "task": {
+          "$ref": "urn:context-design:common:v1#/$defs/task_mode"
         }
       },
       "required": [
@@ -1352,6 +1364,9 @@
               }
             }
           ]
+        },
+        "task": {
+          "$ref": "urn:context-design:common:v1#/$defs/task_mode"
         }
       },
       "required": [
@@ -1500,6 +1515,9 @@
             "interruptible"
           ],
           "additionalProperties": false
+        },
+        "task": {
+          "$ref": "urn:context-design:common:v1#/$defs/task_mode"
         }
       },
       "required": [
@@ -1532,6 +1550,9 @@
             ],
             "additionalProperties": false
           }
+        },
+        "task": {
+          "$ref": "urn:context-design:common:v1#/$defs/task_mode"
         }
       },
       "required": [],
@@ -1595,6 +1616,9 @@
             ],
             "additionalProperties": false
           }
+        },
+        "task": {
+          "$ref": "urn:context-design:common:v1#/$defs/task_mode"
         }
       },
       "required": [],
@@ -1612,6 +1636,9 @@
         "candidate": {},
         "validation_report": {
           "type": "object"
+        },
+        "task": {
+          "$ref": "urn:context-design:common:v1#/$defs/task_mode"
         }
       },
       "required": [

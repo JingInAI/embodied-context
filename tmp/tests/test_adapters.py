@@ -70,15 +70,33 @@ class AdaptersTest(unittest.TestCase):
                     self.assertFalse(mapped['issues'])
                     output=compose(mapped['compose'])
                     validate(output,'composed_output')
+                    expected_kind=export['profile'].get('task_kind','reasoning' if definition['adapter']=='vlabench' and mode=='VLM_reasoning' else 'execution')
+                    self.assertEqual(output['task']['kind'],expected_kind)
+                    self.assertTrue(all(n['result']['task']['kind']==expected_kind for n in output['nodes']))
+                    canonical=dumps(output)
                     for modalities in [['text'],['text','image','video']]:
-                        packet=render_context(output,dict(receiver_id='agent',session_id='s',audience={'modalities':modalities}))
-                        validate(packet,'delivery');encoded=dumps(packet)
-                        self.assertNotIn('SECRET_EVALUATOR_ANSWER',encoded);self.assertNotIn('PRIVATE_FUTURE',encoded)
+                        for content_format in ('json','text_json','text'):
+                            packet=render_context(output,dict(receiver_id='agent',session_id='s',
+                                audience={'modalities':modalities},content_format=content_format))
+                            validate(packet,'delivery');encoded=dumps(packet)
+                            self.assertNotIn('SECRET_EVALUATOR_ANSWER',encoded);self.assertNotIn('PRIVATE_FUTURE',encoded)
+                            self.assertEqual(dumps(output),canonical)
                     # Optional observations are absent, not fabricated; task context still works.
                     minimal=copy.deepcopy(export)
                     minimal['native']={k:v for k,v in minimal['native'].items() if k in ('instruction','desc')}
                     task=adapt(definition['adapter'],minimal,policy=policy,components=['task_context'])
                     self.assertEqual(len(task['compose']['nodes']),1)
+
+    def test_explicit_task_kind_reaches_observation_without_task_node(self):
+        for definition in profiles():
+            for kind in ('execution','reasoning','hybrid'):
+                with self.subTest(adapter=definition['adapter'],kind=kind):
+                    export,policy=make_export(definition)
+                    export['profile']['task_kind']=kind
+                    mapped=adapt(definition['adapter'],export,policy=policy,components=['observation_context'])
+                    self.assertEqual(mapped['compose']['nodes'][0]['request']['input']['task']['kind'],kind)
+                    output=compose(mapped['compose'])
+                    self.assertEqual(output['nodes'][0]['result']['task']['kind'],kind)
 
     def test_every_catalog_identity_is_mapped(self):
         totals={}

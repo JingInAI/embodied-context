@@ -256,6 +256,22 @@
         },
         "availability": {
           "type": "object"
+        },
+        "task_variants": {
+          "type": "object",
+          "properties": {
+            "execution": {
+              "$ref": "#/$defs/task_variant"
+            },
+            "reasoning": {
+              "$ref": "#/$defs/task_variant"
+            },
+            "hybrid": {
+              "$ref": "#/$defs/task_variant"
+            }
+          },
+          "minProperties": 1,
+          "additionalProperties": false
         }
       },
       "required": [],
@@ -294,6 +310,9 @@
         },
         "value": {
           "type": "object"
+        },
+        "task": {
+          "$ref": "#/$defs/task_mode"
         }
       },
       "required": [
@@ -567,6 +586,9 @@
           "items": {
             "$ref": "#/$defs/issue"
           }
+        },
+        "task": {
+          "$ref": "#/$defs/task_mode"
         }
       },
       "required": [
@@ -1017,6 +1039,9 @@
             "$ref": "#/$defs/compose_node"
           },
           "minItems": 1
+        },
+        "task": {
+          "$ref": "#/$defs/task_mode"
         }
       },
       "required": [
@@ -1087,6 +1112,9 @@
             "unavailable",
             "not_applicable"
           ]
+        },
+        "task": {
+          "$ref": "#/$defs/task_mode"
         }
       },
       "required": [
@@ -1095,6 +1123,44 @@
         "nodes",
         "status"
       ],
+      "additionalProperties": false
+    },
+    "task_mode": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "enum": [
+            "execution",
+            "reasoning",
+            "hybrid"
+          ]
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "additionalProperties": false
+    },
+    "task_variant": {
+      "type": "object",
+      "properties": {
+        "input": {
+          "type": "object",
+          "not": {
+            "required": [
+              "task"
+            ]
+          }
+        },
+        "focus": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "minProperties": 1,
       "additionalProperties": false
     }
   }

@@ -75,7 +75,7 @@ class PresentationTests(unittest.TestCase):
                 frozen = dumps(result)
                 pure = text(result, 'json')
                 expected = {k: result[k] for k in ('component', 'status', 'content')}
-                for key in ('issues', 'guidance'):
+                for key in ('task', 'issues', 'guidance'):
                     if key in result:
                         expected[key] = result[key]
                 self.assertEqual(loads(pure), expected)

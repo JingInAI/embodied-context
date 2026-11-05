@@ -5,6 +5,7 @@ from pathlib import Path
 from functools import lru_cache
 
 from ..common import COMPONENTS, at, equal, fail, loads, pointer, unique, validate
+from ..task_modes import combine, declared_task
 
 
 PROFILES=Path(__file__).parent/'profiles.json'
@@ -187,12 +188,13 @@ def adapt(benchmark,export,*,policy,components=None):
             feature('/observation/proprioception')
     supplements=export.get('supplements',{})
     if not isinstance(supplements,dict) or set(supplements)-set(COMPONENTS):fail('invalid_request','Unknown supplementary component input')
+    task_kind=combine([profile.get('task_kind','reasoning' if benchmark=='vlabench' and profile['mode']=='VLM_reasoning' else 'execution')])
     payloads={}
     if 'task_context' in selected:
         instruction_path='/desc' if benchmark=='robocerebra' else '/instruction'
         text=read(instruction_path,True)
         if not isinstance(text,str) or not text:fail('invalid_request','Published instruction must be nonempty text')
-        task=dict(text=text,kind=profile.get('task_kind','reasoning' if benchmark=='vlabench' and profile['mode']=='VLM_reasoning' else 'execution'))
+        task=dict(text=text,kind=task_kind)
         for key in ('instruction_scope','segment_id'):
             if key in profile:task[key]=profile[key]
         payloads['task_context']=dict(task=task)
@@ -214,6 +216,8 @@ def adapt(benchmark,export,*,policy,components=None):
             if component in ('evidence_context','tool_context'):payloads[component]={}
             else:
                 issues.append(dict(code='missing_component_input',path='/supplements/'+component,message='Requested component requires explicit published domain data'));continue
+        combine([task_kind,declared_task(payloads[component].get('task'))])
+        payloads[component].setdefault('task',{})['kind']=task_kind
         request=dict(schema_version='context.v1',scope=copy.deepcopy(export['scope']),input=payloads[component],bindings=bindings)
         if refs:request['references']=list(refs.values())
         if export.get('request'):request['request']=copy.deepcopy(export['request'])
@@ -223,7 +227,7 @@ def adapt(benchmark,export,*,policy,components=None):
     if not nodes:fail('invalid_request','No selected component has a valid input')
     return dict(schema_version='context.adaptation.v1',benchmark=benchmark,profile=copy.deepcopy(profile),
                 catalog_id=catalog.get('catalog_id'),issues=issues,
-                compose=dict(schema_version='context.compose.v1',scope=copy.deepcopy(export['scope']),nodes=nodes))
+                compose=dict(schema_version='context.compose.v1',scope=copy.deepcopy(export['scope']),task=dict(kind=task_kind),nodes=nodes))
 
 
 def decode_depth_sample(value,profile):
