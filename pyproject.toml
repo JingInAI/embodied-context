@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "embodied-context-components"
+version = "1.0.0"
+description = "Offline, evidence-bound embodied agent context components"
+requires-python = ">=3.10"
+dependencies = ["jsonschema>=4.18,<5", "referencing>=0.30,<1"]
+
+[project.scripts]
+embodied-context = "context_components.cli:main"
+
+[tool.setuptools.package-data]
+context_components = ["schemas/*.json", "adapters/*.json"]
+
+[tool.setuptools.packages.find]
+include = ["context_components*"]

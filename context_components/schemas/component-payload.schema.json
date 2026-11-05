@@ -1,0 +1,3138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:context-design:payload:v1",
+  "title": "Component payload selection schema, design revision4",
+  "description": "The selector {component,direction,payload_version,payload} is only a validation harness, not a new runtime envelope. Top-level payload keys and declared shared/critical structures are validated. Operator/provider objects explicitly left open require further semantic and provider schemas.",
+  "type": "object",
+  "properties": {
+    "component": {
+      "enum": [
+        "task_context",
+        "observation_context",
+        "spatial_context",
+        "interaction_contract",
+        "execution_feedback",
+        "response_evidence",
+        "resource_context",
+        "evidence_context",
+        "tool_context",
+        "output_contract"
+      ]
+    },
+    "direction": {
+      "enum": [
+        "input",
+        "output"
+      ]
+    },
+    "payload_version": {
+      "const": "1"
+    },
+    "payload": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "component",
+    "direction",
+    "payload_version",
+    "payload"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "component": {
+            "const": "task_context"
+          },
+          "direction": {
+            "const": "input"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/task_context_input"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "component": {
+            "const": "task_context"
+          },
+          "direction": {
+            "const": "output"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/task_context_output"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "component": {
+            "const": "observation_context"
+          },
+          "direction": {
+            "const": "input"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/observation_context_input"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "component": {
+            "const": "observation_context"
+          },
+          "direction": {
+            "const": "output"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/observation_context_output"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "component": {
+            "const": "spatial_context"
+          },
+          "direction": {
+            "const": "input"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/spatial_context_input"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "component": {
+            "const": "spatial_context"
+          },
+          "direction": {
+            "const": "output"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/spatial_context_output"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "component": {
+            "const": "interaction_contract"
+          },
+          "direction": {
+            "const": "input"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/interaction_contract_input"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "component": {
+            "const": "interaction_contract"
+          },
+          "direction": {
+            "const": "output"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/interaction_contract_output"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "component": {
+            "const": "execution_feedback"
+          },
+          "direction": {
+            "const": "input"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/execution_feedback_input"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "component": {
+            "const": "execution_feedback"
+          },
+          "direction": {
+            "const": "output"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/execution_feedback_output"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "component": {
+            "const": "response_evidence"
+          },
+          "direction": {
+            "const": "input"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/response_evidence_input"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "component": {
+            "const": "response_evidence"
+          },
+          "direction": {
+            "const": "output"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/response_evidence_output"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "component": {
+            "const": "resource_context"
+          },
+          "direction": {
+            "const": "input"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/resource_context_input"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "component": {
+            "const": "resource_context"
+          },
+          "direction": {
+            "const": "output"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/resource_context_output"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "component": {
+            "const": "evidence_context"
+          },
+          "direction": {
+            "const": "input"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/evidence_context_input"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "component": {
+            "const": "evidence_context"
+          },
+          "direction": {
+            "const": "output"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/evidence_context_output"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "component": {
+            "const": "tool_context"
+          },
+          "direction": {
+            "const": "input"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/tool_context_input"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "component": {
+            "const": "tool_context"
+          },
+          "direction": {
+            "const": "output"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/tool_context_output"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "component": {
+            "const": "output_contract"
+          },
+          "direction": {
+            "const": "input"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/output_contract_input"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "component": {
+            "const": "output_contract"
+          },
+          "direction": {
+            "const": "output"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "$ref": "#/$defs/output_contract_output"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "method": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "formula": {
+          "type": "string",
+          "minLength": 1
+        },
+        "parameters": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "version"
+      ],
+      "additionalProperties": false
+    },
+    "claim": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "claim": {},
+        "epistemic": {
+          "enum": [
+            "observed",
+            "derived",
+            "estimated",
+            "hypothesis"
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0
+        },
+        "source_namespace": {
+          "type": "string",
+          "minLength": 1
+        },
+        "origin_epoch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "retracted": {
+          "type": "boolean"
+        },
+        "scope": {
+          "$ref": "urn:context-design:common:v1#/$defs/scope"
+        },
+        "time": {
+          "oneOf": [
+            {
+              "$ref": "urn:context-design:common:v1#/$defs/time_point"
+            },
+            {
+              "$ref": "urn:context-design:common:v1#/$defs/time_interval"
+            }
+          ]
+        },
+        "method": {
+          "$ref": "#/$defs/method"
+        },
+        "assumptions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0
+        },
+        "entity_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0
+        },
+        "validity": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "claim",
+        "epistemic",
+        "evidence_refs"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "epistemic": {
+                "enum": [
+                  "derived",
+                  "estimated"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "method"
+            ]
+          }
+        }
+      ]
+    },
+    "observation": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "modality": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reference_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "enum": [
+            "observation",
+            "demonstration",
+            "reference_example"
+          ]
+        },
+        "captured_at": {
+          "oneOf": [
+            {
+              "$ref": "urn:context-design:common:v1#/$defs/time_point"
+            },
+            {
+              "$ref": "urn:context-design:common:v1#/$defs/time_interval"
+            }
+          ]
+        },
+        "available_at": {
+          "$ref": "urn:context-design:common:v1#/$defs/time_point"
+        },
+        "entity_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0
+        },
+        "frame_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "snapshot_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "quality": {
+          "enum": [
+            "measured",
+            "estimated",
+            "padded",
+            "invalid"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "modality",
+        "reference_id"
+      ],
+      "additionalProperties": false
+    },
+    "goal": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "active",
+            "attempted",
+            "supported",
+            "blocked",
+            "unknown"
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0
+        },
+        "depends_on": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0
+        },
+        "when": {
+          "$ref": "#/$defs/condition"
+        },
+        "repeat_until": {
+          "$ref": "#/$defs/condition"
+        }
+      },
+      "required": [
+        "id",
+        "description"
+      ],
+      "additionalProperties": false
+    },
+    "task_context_input": {
+      "type": "object",
+      "properties": {
+        "task": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "minLength": 1
+            },
+            "kind": {
+              "enum": [
+                "execution",
+                "reasoning",
+                "hybrid"
+              ]
+            },
+            "instruction_scope": {
+              "enum": [
+                "full_task",
+                "current_segment",
+                "unspecified"
+              ]
+            },
+            "segment_id": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "text",
+            "kind"
+          ],
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "if": {
+                "required": [
+                  "instruction_scope"
+                ],
+                "properties": {
+                  "instruction_scope": {
+                    "const": "current_segment"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "segment_id"
+                ]
+              }
+            }
+          ]
+        },
+        "constraints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/claim"
+          },
+          "minItems": 0
+        },
+        "goals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/goal"
+          },
+          "minItems": 0
+        },
+        "procedure": {
+          "type": "object",
+          "properties": {
+            "completion": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/condition"
+              }
+            },
+            "loops": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/condition"
+              }
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "agent_state": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string",
+              "minLength": 1
+            },
+            "goal_status": {
+              "type": "object",
+              "additionalProperties": {
+                "enum": [
+                  "pending",
+                  "active",
+                  "attempted",
+                  "supported",
+                  "blocked",
+                  "unknown"
+                ]
+              }
+            }
+          },
+          "required": [
+            "version",
+            "goal_status"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "task"
+      ],
+      "additionalProperties": false
+    },
+    "observation_context_input": {
+      "type": "object",
+      "properties": {
+        "observations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/observation"
+          },
+          "minItems": 0
+        },
+        "features": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/claim"
+          },
+          "minItems": 0
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/claim"
+          },
+          "minItems": 0
+        },
+        "extractors": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0
+        }
+      },
+      "required": [],
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "observations"
+          ]
+        },
+        {
+          "required": [
+            "features"
+          ]
+        },
+        {
+          "required": [
+            "events"
+          ]
+        }
+      ]
+    },
+    "spatial_context_input": {
+      "type": "object",
+      "properties": {
+        "frames": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "entity_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "length_unit": {
+                "type": "string",
+                "minLength": 1
+              },
+              "handedness": {
+                "enum": [
+                  "right",
+                  "left"
+                ]
+              },
+              "x_axis": {
+                "type": "string",
+                "minLength": 1
+              },
+              "y_axis": {
+                "type": "string",
+                "minLength": 1
+              },
+              "forward_axis": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "id",
+              "length_unit",
+              "handedness"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1
+        },
+        "queries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/spatial_query"
+          },
+          "minItems": 1
+        },
+        "transforms": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/spatial_transform"
+          },
+          "minItems": 0
+        },
+        "cameras": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/spatial_camera"
+          },
+          "minItems": 0
+        },
+        "features": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "minItems": 0
+        },
+        "geometry": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/spatial_geometry"
+          },
+          "minItems": 0
+        },
+        "processors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": [
+        "frames",
+        "queries"
+      ],
+      "additionalProperties": false
+    },
+    "interaction_contract_input": {
+      "type": "object",
+      "properties": {
+        "operations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "type": "string",
+                "minLength": 1
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              },
+              "parameters": {
+                "type": "object"
+              },
+              "entity_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "frame_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "normalization": {
+                "type": "object"
+              }
+            },
+            "required": [
+              "id",
+              "kind",
+              "description",
+              "parameters"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0
+        },
+        "control_groups": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "minItems": 0
+        },
+        "execution_semantics": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "operations"
+      ],
+      "additionalProperties": false
+    },
+    "execution_feedback_input": {
+      "type": "object",
+      "properties": {
+        "executions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "status": {
+                "type": "string",
+                "minLength": 1
+              },
+              "evidence_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0
+              },
+              "entity_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "request_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "submitted": {
+                "type": "object",
+                "properties": {
+                  "items": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "evidence_refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                },
+                "required": [
+                  "items"
+                ],
+                "additionalProperties": false
+              },
+              "accepted": {
+                "type": "object",
+                "properties": {
+                  "items": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "evidence_refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                },
+                "required": [
+                  "items"
+                ],
+                "additionalProperties": false
+              },
+              "executed": {
+                "type": "object",
+                "properties": {
+                  "items": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "evidence_refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                },
+                "required": [
+                  "items"
+                ],
+                "additionalProperties": false
+              },
+              "started_at": {
+                "$ref": "urn:context-design:common:v1#/$defs/time_point"
+              },
+              "ended_at": {
+                "$ref": "urn:context-design:common:v1#/$defs/time_point"
+              },
+              "before": {
+                "type": "string",
+                "minLength": 1
+              },
+              "after": {
+                "type": "string",
+                "minLength": 1
+              },
+              "termination": {
+                "type": "object"
+              },
+              "source_namespace": {
+                "type": "string",
+                "minLength": 1
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "scope": {
+                "$ref": "urn:context-design:common:v1#/$defs/scope"
+              },
+              "origin_epoch": {
+                "type": "string",
+                "minLength": 1
+              },
+              "retracted": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id",
+              "status"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "executions"
+      ],
+      "additionalProperties": false
+    },
+    "response_evidence_input": {
+      "type": "object",
+      "properties": {
+        "variables": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "unit": {
+                "type": "string",
+                "minLength": 1
+              },
+              "role": {
+                "enum": [
+                  "input",
+                  "response"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "unit"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1
+        },
+        "records": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "inputs": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "responses": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              },
+              "conditions": {
+                "type": "object"
+              },
+              "scope": {
+                "$ref": "urn:context-design:common:v1#/$defs/scope"
+              },
+              "bindings": {
+                "$ref": "urn:context-design:common:v1#/$defs/bindings"
+              },
+              "evidence_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "executed": {
+                "type": "boolean"
+              },
+              "retracted": {
+                "type": "boolean"
+              },
+              "time": {
+                "$ref": "urn:context-design:common:v1#/$defs/time_point"
+              },
+              "source_namespace": {
+                "type": "string",
+                "minLength": 1
+              },
+              "origin_epoch": {
+                "type": "string",
+                "minLength": 1
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "id",
+              "inputs",
+              "responses",
+              "conditions",
+              "scope",
+              "bindings",
+              "evidence_refs",
+              "executed"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "conditions": {
+          "type": "object"
+        },
+        "query": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "support",
+                "estimate",
+                "compare_candidates"
+              ]
+            },
+            "inputs": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "number"
+              }
+            },
+            "radius": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "distance_scale": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              }
+            },
+            "half_life_seconds": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "now": {
+              "$ref": "urn:context-design:common:v1#/$defs/time_point"
+            },
+            "max_age_seconds": {
+              "type": "number",
+              "minimum": 0
+            },
+            "max_residual_rms": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "candidates": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "inputs": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "required": [
+                  "id",
+                  "inputs"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "kind": {
+                    "const": "estimate"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "inputs",
+                  "radius",
+                  "distance_scale"
+                ]
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "kind": {
+                    "const": "compare_candidates"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "candidates",
+                  "radius",
+                  "distance_scale"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "required": [
+        "variables",
+        "records",
+        "conditions",
+        "query"
+      ],
+      "additionalProperties": false
+    },
+    "resource_context_input": {
+      "type": "object",
+      "properties": {
+        "resources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "unit": {
+                "type": "string",
+                "minLength": 1
+              },
+              "remaining": {
+                "type": "number",
+                "minimum": 0
+              },
+              "as_of": {
+                "$ref": "urn:context-design:common:v1#/$defs/time_point"
+              },
+              "deadline": {
+                "$ref": "urn:context-design:common:v1#/$defs/time_point"
+              }
+            },
+            "required": [
+              "id",
+              "unit"
+            ],
+            "additionalProperties": false,
+            "oneOf": [
+              {
+                "required": [
+                  "remaining",
+                  "as_of"
+                ],
+                "not": {
+                  "required": [
+                    "deadline"
+                  ]
+                }
+              },
+              {
+                "required": [
+                  "deadline"
+                ],
+                "not": {
+                  "anyOf": [
+                    {
+                      "required": [
+                        "remaining"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "as_of"
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "minItems": 0
+        },
+        "now": {
+          "$ref": "urn:context-design:common:v1#/$defs/time_point"
+        },
+        "workload": {
+          "type": "object",
+          "properties": {
+            "items": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "items"
+          ],
+          "additionalProperties": false
+        },
+        "cost_model": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string",
+              "minLength": 1
+            },
+            "per_item": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                  },
+                  "unit": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "value",
+                  "unit"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "version",
+            "per_item"
+          ],
+          "additionalProperties": false
+        },
+        "execution_window": {
+          "type": "object",
+          "properties": {
+            "max_items": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "minimum_items": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "interruptible": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "max_items",
+            "interruptible"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "resources"
+      ],
+      "additionalProperties": false
+    },
+    "evidence_context_input": {
+      "type": "object",
+      "properties": {
+        "queries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "enum": [
+                  "readability",
+                  "index"
+                ]
+              },
+              "reference_id": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "kind",
+              "reference_id"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "tool_context_input": {
+      "type": "object",
+      "properties": {
+        "calls": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "call_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "tool_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "status": {
+                "enum": [
+                  "succeeded",
+                  "failed",
+                  "cancelled",
+                  "timeout"
+                ]
+              },
+              "version": {
+                "type": "string",
+                "minLength": 1
+              },
+              "input_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "output_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "issues": {
+                "type": "array",
+                "items": {
+                  "$ref": "urn:context-design:common:v1#/$defs/issue"
+                }
+              }
+            },
+            "required": [
+              "call_id",
+              "tool_id",
+              "status",
+              "version",
+              "input_refs"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "output_contract_input": {
+      "type": "object",
+      "properties": {
+        "delivery": {
+          "type": "object"
+        },
+        "contract": {
+          "type": "object"
+        },
+        "candidate": {},
+        "validation_report": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "delivery",
+        "contract"
+      ],
+      "additionalProperties": false
+    },
+    "task_context_output": {
+      "type": "object",
+      "properties": {
+        "requirements": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "minItems": 0
+        },
+        "active_focus": {
+          "type": "string",
+          "minLength": 1
+        },
+        "open_questions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0
+        },
+        "goals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/goal"
+          },
+          "minItems": 0
+        },
+        "next_checks": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "requirements",
+        "active_focus",
+        "open_questions"
+      ],
+      "additionalProperties": false
+    },
+    "observation_context_output": {
+      "type": "object",
+      "properties": {
+        "entities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/claim"
+          },
+          "minItems": 0
+        },
+        "relations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/claim"
+          },
+          "minItems": 0
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/claim"
+          },
+          "minItems": 0
+        },
+        "unknowns": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0
+        },
+        "coverage": {
+          "type": "object"
+        },
+        "count_status": {
+          "enum": [
+            "exact",
+            "incomplete",
+            "unknown",
+            "lower_bound"
+          ]
+        }
+      },
+      "required": [],
+      "additionalProperties": false,
+      "minProperties": 1
+    },
+    "spatial_context_output": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "query_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "status": {
+                "enum": [
+                  "ready",
+                  "unavailable",
+                  "not_applicable"
+                ]
+              },
+              "value": {
+                "$ref": "#/$defs/spatial_value"
+              },
+              "epistemic": {
+                "enum": [
+                  "derived",
+                  "estimated"
+                ]
+              },
+              "evidence_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0
+              },
+              "method": {
+                "$ref": "#/$defs/method"
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0
+              },
+              "issues": {
+                "type": "array",
+                "items": {
+                  "$ref": "urn:context-design:common:v1#/$defs/issue"
+                },
+                "minItems": 1
+              }
+            },
+            "required": [
+              "query_id",
+              "status"
+            ],
+            "additionalProperties": false,
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "status": {
+                      "const": "ready"
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "value",
+                    "evidence_refs",
+                    "method"
+                  ]
+                },
+                "else": {
+                  "required": [
+                    "issues"
+                  ],
+                  "not": {
+                    "required": [
+                      "value"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "results"
+      ],
+      "additionalProperties": false
+    },
+    "interaction_contract_output": {
+      "type": "object",
+      "properties": {
+        "operations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "type": "string",
+                "minLength": 1
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              },
+              "parameters": {
+                "type": "object"
+              },
+              "entity_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "frame_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "normalization": {
+                "type": "object"
+              }
+            },
+            "required": [
+              "id",
+              "kind",
+              "description",
+              "parameters"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0
+        },
+        "control_groups": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "minItems": 0
+        },
+        "execution_semantics": {
+          "type": "object"
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "operations"
+      ],
+      "additionalProperties": false
+    },
+    "execution_feedback_output": {
+      "type": "object",
+      "properties": {
+        "segments": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "minItems": 0
+        },
+        "changes": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "minItems": 0
+        },
+        "failures": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "minItems": 0
+        },
+        "unknowns": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0
+        }
+      },
+      "required": [],
+      "additionalProperties": false,
+      "minProperties": 1
+    },
+    "response_evidence_output": {
+      "type": "object",
+      "properties": {
+        "support": {
+          "type": "object"
+        },
+        "estimates": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "minItems": 0
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0
+        },
+        "candidate_comparison": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "support",
+        "estimates",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "resource_context_output": {
+      "type": "object",
+      "properties": {
+        "balances": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "minItems": 0
+        },
+        "limits": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "minItems": 0
+        },
+        "shortfalls": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "minItems": 0
+        },
+        "unknowns": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0
+        },
+        "supported_work": {
+          "type": "object"
+        },
+        "reserve": {
+          "type": "object"
+        },
+        "slack": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "balances"
+      ],
+      "additionalProperties": false
+    },
+    "evidence_context_output": {
+      "type": "object",
+      "properties": {
+        "entries": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "entries"
+      ],
+      "additionalProperties": false
+    },
+    "tool_context_output": {
+      "type": "object",
+      "properties": {
+        "capabilities": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "minItems": 0
+        },
+        "calls": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "capabilities"
+      ],
+      "additionalProperties": false
+    },
+    "output_contract_output": {
+      "type": "object",
+      "properties": {
+        "requirements": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "minItems": 0
+        },
+        "checks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "rule_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "status": {
+                "enum": [
+                  "passed",
+                  "failed",
+                  "not_evaluated"
+                ]
+              },
+              "path": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "rule_id",
+              "status"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "requirements"
+      ],
+      "additionalProperties": false
+    },
+    "spatial_rotation": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "representation": {
+              "const": "matrix3"
+            },
+            "rows": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 3,
+                "maxItems": 3
+              },
+              "minItems": 3,
+              "maxItems": 3
+            }
+          },
+          "required": [
+            "representation",
+            "rows"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "representation": {
+              "const": "quaternion"
+            },
+            "order": {
+              "enum": [
+                "xyzw",
+                "wxyz"
+              ]
+            },
+            "values": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 4,
+              "maxItems": 4
+            }
+          },
+          "required": [
+            "representation",
+            "order",
+            "values"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "spatial_transform": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_frame": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target_frame": {
+          "type": "string",
+          "minLength": 1
+        },
+        "translation": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "length_unit": {
+          "enum": [
+            "m",
+            "cm",
+            "mm"
+          ]
+        },
+        "rotation": {
+          "$ref": "#/$defs/spatial_rotation"
+        },
+        "temporal": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "static"
+                }
+              },
+              "required": [
+                "kind"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "sample"
+                },
+                "time": {
+                  "$ref": "urn:context-design:common:v1#/$defs/time_point"
+                }
+              },
+              "required": [
+                "kind",
+                "time"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "source_frame",
+        "target_frame",
+        "translation",
+        "length_unit",
+        "rotation",
+        "temporal",
+        "evidence_refs"
+      ],
+      "additionalProperties": false
+    },
+    "spatial_camera": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "frame_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "image_size": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "model": {
+              "const": "pinhole"
+            },
+            "intrinsics": {
+              "type": "object",
+              "properties": {
+                "fx": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "fy": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "cx": {
+                  "type": "number"
+                },
+                "cy": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "fx",
+                "fy",
+                "cx",
+                "cy"
+              ],
+              "additionalProperties": false
+            },
+            "distortion": {
+              "const": "none"
+            },
+            "pixel_origin": {
+              "const": "top_left"
+            },
+            "pixel_centers": {
+              "const": "integer_coordinates"
+            }
+          },
+          "required": [
+            "id",
+            "frame_id",
+            "image_size",
+            "evidence_refs",
+            "model",
+            "intrinsics",
+            "distortion",
+            "pixel_origin",
+            "pixel_centers"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "frame_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "image_size": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "model": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_]*:[A-Za-z0-9_.-]+$"
+            },
+            "parameters_schema_reference_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "parameters": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "id",
+            "frame_id",
+            "image_size",
+            "evidence_refs",
+            "model",
+            "parameters_schema_reference_id",
+            "parameters"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "spatial_depth": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "enum": [
+            "optical_z",
+            "radial_range"
+          ]
+        },
+        "value": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "unit": {
+          "enum": [
+            "m",
+            "cm",
+            "mm"
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "kind",
+        "value",
+        "unit",
+        "evidence_refs"
+      ],
+      "additionalProperties": false
+    },
+    "spatial_plane": {
+      "type": "object",
+      "properties": {
+        "normal": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "offset": {
+          "type": "number"
+        },
+        "frame_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "unit": {
+          "enum": [
+            "m",
+            "cm",
+            "mm"
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "normal",
+        "offset",
+        "frame_id",
+        "unit",
+        "evidence_refs"
+      ],
+      "additionalProperties": false
+    },
+    "spatial_geometry": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "frame_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "unit": {
+              "enum": [
+                "m",
+                "cm",
+                "mm"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "kind": {
+              "const": "point"
+            },
+            "point": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 3,
+              "maxItems": 3
+            }
+          },
+          "required": [
+            "id",
+            "frame_id",
+            "unit",
+            "evidence_refs",
+            "kind",
+            "point"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "frame_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "unit": {
+              "enum": [
+                "m",
+                "cm",
+                "mm"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "kind": {
+              "const": "sphere"
+            },
+            "center": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 3,
+              "maxItems": 3
+            },
+            "radius": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "id",
+            "frame_id",
+            "unit",
+            "evidence_refs",
+            "kind",
+            "center",
+            "radius"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "frame_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "unit": {
+              "enum": [
+                "m",
+                "cm",
+                "mm"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "kind": {
+              "const": "aabb"
+            },
+            "min": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 3,
+              "maxItems": 3
+            },
+            "max": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 3,
+              "maxItems": 3
+            }
+          },
+          "required": [
+            "id",
+            "frame_id",
+            "unit",
+            "evidence_refs",
+            "kind",
+            "min",
+            "max"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "frame_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "unit": {
+              "enum": [
+                "m",
+                "cm",
+                "mm"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "kind": {
+              "const": "plane"
+            },
+            "normal": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 3,
+              "maxItems": 3
+            },
+            "offset": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "id",
+            "frame_id",
+            "unit",
+            "evidence_refs",
+            "kind",
+            "normal",
+            "offset"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "spatial_query": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "time": {
+              "$ref": "urn:context-design:common:v1#/$defs/time_point"
+            },
+            "kind": {
+              "const": "project"
+            },
+            "point": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 3,
+              "maxItems": 3
+            },
+            "frame_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "camera_id": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "point",
+            "frame_id",
+            "camera_id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "time": {
+              "$ref": "urn:context-design:common:v1#/$defs/time_point"
+            },
+            "kind": {
+              "const": "unproject"
+            },
+            "pixel": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "camera_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "depth": {
+              "$ref": "#/$defs/spatial_depth"
+            },
+            "plane": {
+              "$ref": "#/$defs/spatial_plane"
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "pixel",
+            "camera_id"
+          ],
+          "additionalProperties": false,
+          "not": {
+            "required": [
+              "depth",
+              "plane"
+            ]
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "time": {
+              "$ref": "urn:context-design:common:v1#/$defs/time_point"
+            },
+            "kind": {
+              "const": "transform"
+            },
+            "point": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 3,
+              "maxItems": 3
+            },
+            "source_frame": {
+              "type": "string",
+              "minLength": 1
+            },
+            "target_frame": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "point",
+            "source_frame",
+            "target_frame"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "time": {
+              "$ref": "urn:context-design:common:v1#/$defs/time_point"
+            },
+            "kind": {
+              "const": "distance"
+            },
+            "point_a": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 3,
+              "maxItems": 3
+            },
+            "point_b": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 3,
+              "maxItems": 3
+            },
+            "frame_id": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "point_a",
+            "point_b",
+            "frame_id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "time": {
+              "$ref": "urn:context-design:common:v1#/$defs/time_point"
+            },
+            "kind": {
+              "const": "clearance"
+            },
+            "geometry_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 2,
+              "maxItems": 2,
+              "uniqueItems": true
+            },
+            "frame_id": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "id",
+            "kind",
+            "geometry_ids",
+            "frame_id"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "spatial_value": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "pixel"
+            },
+            "pixel": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "camera_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "unit": {
+              "const": "px"
+            },
+            "validity": {
+              "enum": [
+                "in_image",
+                "out_of_image"
+              ]
+            },
+            "occlusion": {
+              "const": "unknown"
+            }
+          },
+          "required": [
+            "kind",
+            "pixel",
+            "camera_id",
+            "unit",
+            "validity",
+            "occlusion"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "point"
+            },
+            "point": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 3,
+              "maxItems": 3
+            },
+            "frame_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "unit": {
+              "enum": [
+                "m",
+                "cm",
+                "mm"
+              ]
+            }
+          },
+          "required": [
+            "kind",
+            "point",
+            "frame_id",
+            "unit"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "ray"
+            },
+            "origin": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 3,
+              "maxItems": 3
+            },
+            "direction": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 3,
+              "maxItems": 3
+            },
+            "frame_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "unit": {
+              "enum": [
+                "m",
+                "cm",
+                "mm"
+              ]
+            }
+          },
+          "required": [
+            "kind",
+            "origin",
+            "direction",
+            "frame_id",
+            "unit"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "distance"
+            },
+            "distance": {
+              "type": "number",
+              "minimum": 0
+            },
+            "frame_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "unit": {
+              "enum": [
+                "m",
+                "cm",
+                "mm"
+              ]
+            }
+          },
+          "required": [
+            "kind",
+            "distance",
+            "frame_id",
+            "unit"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "clearance"
+            },
+            "distance": {
+              "type": "number"
+            },
+            "relation": {
+              "enum": [
+                "inside",
+                "on",
+                "outside"
+              ]
+            },
+            "geometry_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "frame_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "unit": {
+              "enum": [
+                "m",
+                "cm",
+                "mm"
+              ]
+            }
+          },
+          "required": [
+            "kind",
+            "distance",
+            "relation",
+            "geometry_ids",
+            "frame_id",
+            "unit"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "condition": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "fact_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "equals": {}
+          },
+          "required": [
+            "fact_id",
+            "equals"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "all": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/condition"
+              }
+            }
+          },
+          "required": [
+            "all"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "any": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/condition"
+              }
+            }
+          },
+          "required": [
+            "any"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "not": {
+              "$ref": "#/$defs/condition"
+            }
+          },
+          "required": [
+            "not"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

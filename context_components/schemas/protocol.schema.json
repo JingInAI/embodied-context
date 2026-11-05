@@ -1,0 +1,1101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:context-design:common:v1",
+  "title": "Context v1 common envelope design",
+  "description": "Design-only common envelopes, composition and delivery. Domain payloads, authorization, freshness, graph and transactional semantics require separate validation. Strict parser rejects duplicate keys/nonfinite numbers.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/input"
+    },
+    {
+      "$ref": "#/$defs/output"
+    },
+    {
+      "$ref": "#/$defs/error"
+    },
+    {
+      "$ref": "#/$defs/delivery"
+    },
+    {
+      "$ref": "#/$defs/compose_input"
+    },
+    {
+      "$ref": "#/$defs/composed_output"
+    }
+  ],
+  "$defs": {
+    "scope": {
+      "type": "object",
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "task_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "epoch_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "turn_index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "perspective_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "run_id",
+        "task_id",
+        "epoch_id",
+        "turn_index"
+      ],
+      "additionalProperties": false
+    },
+    "bindings": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "required": {
+            "type": "boolean"
+          },
+          "value": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "required",
+          "value"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "reference": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "media_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "inline": {},
+        "uri": {
+          "type": "string",
+          "minLength": 1
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "size_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "scope": {
+          "$ref": "#/$defs/scope"
+        },
+        "time": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/time_point"
+            },
+            {
+              "$ref": "#/$defs/time_interval"
+            }
+          ]
+        },
+        "frame_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_kind": {
+          "type": "string",
+          "minLength": 1
+        },
+        "visibility": {
+          "type": [
+            "string",
+            "object"
+          ]
+        },
+        "locator": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "media_type"
+      ],
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "required": [
+            "inline"
+          ],
+          "not": {
+            "required": [
+              "uri"
+            ]
+          }
+        },
+        {
+          "required": [
+            "uri"
+          ],
+          "not": {
+            "required": [
+              "inline"
+            ]
+          }
+        }
+      ]
+    },
+    "issue": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^(?:/(?:[^~]|~[01])*)*$"
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "needed_input": {}
+      },
+      "required": [
+        "code",
+        "path",
+        "message"
+      ],
+      "additionalProperties": false
+    },
+    "audience": {
+      "type": "object",
+      "properties": {
+        "modalities": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "modalities"
+      ],
+      "additionalProperties": false
+    },
+    "budget": {
+      "type": "object",
+      "properties": {
+        "max_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_tokens": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "tokenizer_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [],
+      "additionalProperties": false,
+      "dependentRequired": {
+        "max_tokens": [
+          "tokenizer_id"
+        ],
+        "tokenizer_id": [
+          "max_tokens"
+        ]
+      }
+    },
+    "request": {
+      "type": "object",
+      "properties": {
+        "focus": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "audience": {
+          "$ref": "#/$defs/audience"
+        },
+        "language": {
+          "type": "string",
+          "minLength": 1
+        },
+        "budget": {
+          "$ref": "#/$defs/budget"
+        },
+        "availability": {
+          "type": "object"
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "state": {
+      "type": "object",
+      "properties": {
+        "state_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "owner": {
+          "enum": [
+            "task_context",
+            "observation_context",
+            "spatial_context",
+            "interaction_contract",
+            "execution_feedback",
+            "response_evidence",
+            "resource_context",
+            "evidence_context",
+            "tool_context",
+            "output_contract"
+          ]
+        },
+        "state_schema_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope": {
+          "$ref": "#/$defs/scope"
+        },
+        "bindings": {
+          "$ref": "#/$defs/bindings"
+        },
+        "value": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "state_id",
+        "owner",
+        "state_schema_version",
+        "scope",
+        "bindings",
+        "value"
+      ],
+      "additionalProperties": false
+    },
+    "state_update": {
+      "type": "object",
+      "properties": {
+        "base_state_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "state": {
+          "$ref": "#/$defs/state"
+        }
+      },
+      "required": [
+        "base_state_id",
+        "state"
+      ],
+      "additionalProperties": false
+    },
+    "upstream": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "context": {
+              "$ref": "#/$defs/output"
+            }
+          },
+          "required": [
+            "context"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "reference_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "context_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "component": {
+              "enum": [
+                "task_context",
+                "observation_context",
+                "spatial_context",
+                "interaction_contract",
+                "execution_feedback",
+                "response_evidence",
+                "resource_context",
+                "evidence_context",
+                "tool_context",
+                "output_contract"
+              ]
+            }
+          },
+          "required": [
+            "reference_id",
+            "context_id",
+            "component"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "tool": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "input_schema": {
+          "type": "object"
+        },
+        "output_schema": {
+          "type": "object"
+        },
+        "effects": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "read_published_data",
+              "process_data",
+              "write_scratch_artifacts"
+            ]
+          }
+        },
+        "limits": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "purpose",
+        "input_schema",
+        "output_schema",
+        "effects",
+        "limits"
+      ],
+      "additionalProperties": false
+    },
+    "input": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "context.v1"
+        },
+        "scope": {
+          "$ref": "#/$defs/scope"
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reference"
+          }
+        },
+        "bindings": {
+          "$ref": "#/$defs/bindings"
+        },
+        "extensions": {
+          "$ref": "#/$defs/extensions"
+        },
+        "input": {
+          "type": "object"
+        },
+        "upstream": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/upstream"
+          }
+        },
+        "history": {
+          "$ref": "#/$defs/state"
+        },
+        "request": {
+          "$ref": "#/$defs/request"
+        },
+        "tools": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/tool"
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "scope",
+        "input"
+      ],
+      "additionalProperties": false
+    },
+    "guidance": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "constraint",
+            "recommendation",
+            "limitation"
+          ]
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "when": {},
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "context.v1"
+        },
+        "scope": {
+          "$ref": "#/$defs/scope"
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reference"
+          }
+        },
+        "bindings": {
+          "$ref": "#/$defs/bindings"
+        },
+        "extensions": {
+          "$ref": "#/$defs/extensions"
+        },
+        "component": {
+          "enum": [
+            "task_context",
+            "observation_context",
+            "spatial_context",
+            "interaction_contract",
+            "execution_feedback",
+            "response_evidence",
+            "resource_context",
+            "evidence_context",
+            "tool_context",
+            "output_contract"
+          ]
+        },
+        "payload_version": {
+          "const": "1"
+        },
+        "context_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "ready",
+            "partial",
+            "unavailable",
+            "not_applicable"
+          ]
+        },
+        "content": {
+          "type": "object"
+        },
+        "guidance": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/guidance"
+          }
+        },
+        "state_update": {
+          "$ref": "#/$defs/state_update"
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/issue"
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "component",
+        "payload_version",
+        "context_id",
+        "scope",
+        "status",
+        "content"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "enum": [
+                  "partial",
+                  "unavailable"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "issues"
+            ],
+            "properties": {
+              "issues": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "error": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "context.error.v1"
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/issue"
+          },
+          "minItems": 1
+        },
+        "scope": {
+          "$ref": "#/$defs/scope"
+        }
+      },
+      "required": [
+        "schema_version",
+        "issues"
+      ],
+      "additionalProperties": false
+    },
+    "block": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "text",
+            "media"
+          ]
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reference_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "critical": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "critical"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "text"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "text"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "media"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "reference_ids"
+            ]
+          }
+        }
+      ]
+    },
+    "operation": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "upsert"
+            },
+            "block": {
+              "$ref": "#/$defs/block"
+            }
+          },
+          "required": [
+            "op",
+            "block"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "remove"
+            },
+            "id": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "op",
+            "id"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "delivery": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "schema_version": {
+              "const": "context.delivery.v1"
+            },
+            "delivery_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "receiver_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "session_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "context_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "mode": {
+              "const": "full"
+            },
+            "blocks": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/block"
+              }
+            },
+            "resources": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/delivery_resource"
+              }
+            },
+            "scope": {
+              "$ref": "#/$defs/scope"
+            }
+          },
+          "required": [
+            "schema_version",
+            "delivery_id",
+            "receiver_id",
+            "session_id",
+            "context_ids",
+            "mode",
+            "blocks",
+            "scope"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schema_version": {
+              "const": "context.delivery.v1"
+            },
+            "delivery_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "receiver_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "session_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "context_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "mode": {
+              "const": "delta"
+            },
+            "base_delivery_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "operations": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/operation"
+              }
+            },
+            "block_order": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            },
+            "resources": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/delivery_resource"
+              }
+            },
+            "scope": {
+              "$ref": "#/$defs/scope"
+            }
+          },
+          "required": [
+            "schema_version",
+            "delivery_id",
+            "receiver_id",
+            "session_id",
+            "context_ids",
+            "mode",
+            "base_delivery_id",
+            "operations",
+            "block_order",
+            "scope"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "time_point": {
+      "type": "object",
+      "properties": {
+        "clock_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "clock_epoch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "unit": {
+          "enum": [
+            "s",
+            "ms",
+            "us",
+            "ns"
+          ]
+        },
+        "value": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "clock_id",
+        "clock_epoch",
+        "unit",
+        "value"
+      ],
+      "additionalProperties": false
+    },
+    "time_interval": {
+      "type": "object",
+      "properties": {
+        "clock_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "clock_epoch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "unit": {
+          "enum": [
+            "s",
+            "ms",
+            "us",
+            "ns"
+          ]
+        },
+        "start": {
+          "type": "number"
+        },
+        "end": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "clock_id",
+        "clock_epoch",
+        "unit",
+        "start",
+        "end"
+      ],
+      "additionalProperties": false
+    },
+    "delivery_resource": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": "object",
+          "properties": {
+            "context_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "reference_id": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "context_id",
+            "reference_id"
+          ],
+          "additionalProperties": false
+        },
+        "reference": {
+          "$ref": "#/$defs/reference"
+        }
+      },
+      "required": [
+        "id",
+        "source",
+        "reference"
+      ],
+      "additionalProperties": false
+    },
+    "compose_node": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "component": {
+          "enum": [
+            "task_context",
+            "observation_context",
+            "spatial_context",
+            "interaction_contract",
+            "execution_feedback",
+            "response_evidence",
+            "resource_context",
+            "evidence_context",
+            "tool_context",
+            "output_contract"
+          ]
+        },
+        "request": {
+          "$ref": "#/$defs/input"
+        },
+        "upstream_nodes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "component",
+        "request"
+      ],
+      "additionalProperties": false
+    },
+    "compose_input": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "context.compose.v1"
+        },
+        "scope": {
+          "$ref": "#/$defs/scope"
+        },
+        "nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/compose_node"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "schema_version",
+        "scope",
+        "nodes"
+      ],
+      "additionalProperties": false
+    },
+    "composed_node": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "result": {
+              "$ref": "#/$defs/output"
+            }
+          },
+          "required": [
+            "id",
+            "result"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "error": {
+              "$ref": "#/$defs/error"
+            }
+          },
+          "required": [
+            "id",
+            "error"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "composed_output": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "context.composed.v1"
+        },
+        "scope": {
+          "$ref": "#/$defs/scope"
+        },
+        "nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/composed_node"
+          },
+          "minItems": 1
+        },
+        "status": {
+          "enum": [
+            "ready",
+            "partial",
+            "unavailable",
+            "not_applicable"
+          ]
+        }
+      },
+      "required": [
+        "schema_version",
+        "scope",
+        "nodes",
+        "status"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

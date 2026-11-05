@@ -1,0 +1,544 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:context-components:state-values:v1",
+  "$defs": {
+    "observation_context": {
+      "type": "object",
+      "properties": {
+        "records": {
+          "type": "array",
+          "items": {
+            "allOf": [
+              {
+                "$ref": "urn:context-design:payload:v1#/$defs/claim"
+              },
+              {
+                "required": [
+                  "source_namespace",
+                  "revision",
+                  "scope",
+                  "origin_epoch"
+                ]
+              }
+            ]
+          }
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:context-design:common:v1#/$defs/reference"
+          }
+        },
+        "complete_set": {
+          "type": "boolean"
+        },
+        "event_keys": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 4,
+            "maxItems": 4
+          }
+        }
+      },
+      "required": [
+        "records",
+        "references",
+        "complete_set",
+        "event_keys"
+      ],
+      "additionalProperties": false
+    },
+    "execution_feedback": {
+      "type": "object",
+      "properties": {
+        "records": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "source_namespace": {
+                "type": "string",
+                "minLength": 1
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "scope": {
+                "$ref": "urn:context-design:common:v1#/$defs/scope"
+              },
+              "origin_epoch": {
+                "type": "string",
+                "minLength": 1
+              },
+              "retracted": {
+                "type": "boolean"
+              },
+              "evidence_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "execution": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "status": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "evidence_refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "minItems": 0
+                  },
+                  "entity_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "request_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "submitted": {
+                    "type": "object",
+                    "properties": {
+                      "items": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "evidence_refs": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      }
+                    },
+                    "required": [
+                      "items"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "accepted": {
+                    "type": "object",
+                    "properties": {
+                      "items": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "evidence_refs": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      }
+                    },
+                    "required": [
+                      "items"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "executed": {
+                    "type": "object",
+                    "properties": {
+                      "items": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "evidence_refs": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      }
+                    },
+                    "required": [
+                      "items"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "started_at": {
+                    "$ref": "urn:context-design:common:v1#/$defs/time_point"
+                  },
+                  "ended_at": {
+                    "$ref": "urn:context-design:common:v1#/$defs/time_point"
+                  },
+                  "before": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "after": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "termination": {
+                    "type": "object"
+                  },
+                  "source_namespace": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "revision": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "scope": {
+                    "$ref": "urn:context-design:common:v1#/$defs/scope"
+                  },
+                  "origin_epoch": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "retracted": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "id",
+                  "status"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "id",
+              "source_namespace",
+              "revision",
+              "scope",
+              "origin_epoch",
+              "evidence_refs",
+              "execution"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:context-design:common:v1#/$defs/reference"
+          }
+        },
+        "complete_set": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "records",
+        "references",
+        "complete_set"
+      ],
+      "additionalProperties": false
+    },
+    "response_evidence": {
+      "type": "object",
+      "properties": {
+        "records": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "source_namespace": {
+                "type": "string",
+                "minLength": 1
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "scope": {
+                "$ref": "urn:context-design:common:v1#/$defs/scope"
+              },
+              "origin_epoch": {
+                "type": "string",
+                "minLength": 1
+              },
+              "retracted": {
+                "type": "boolean"
+              },
+              "evidence_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "record": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "inputs": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "number"
+                    }
+                  },
+                  "responses": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "number"
+                    }
+                  },
+                  "conditions": {
+                    "type": "object"
+                  },
+                  "scope": {
+                    "$ref": "urn:context-design:common:v1#/$defs/scope"
+                  },
+                  "bindings": {
+                    "$ref": "urn:context-design:common:v1#/$defs/bindings"
+                  },
+                  "evidence_refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "executed": {
+                    "type": "boolean"
+                  },
+                  "retracted": {
+                    "type": "boolean"
+                  },
+                  "time": {
+                    "$ref": "urn:context-design:common:v1#/$defs/time_point"
+                  },
+                  "source_namespace": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "origin_epoch": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "revision": {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                },
+                "required": [
+                  "id",
+                  "inputs",
+                  "responses",
+                  "conditions",
+                  "scope",
+                  "bindings",
+                  "evidence_refs",
+                  "executed"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "id",
+              "source_namespace",
+              "revision",
+              "scope",
+              "origin_epoch",
+              "evidence_refs",
+              "record"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:context-design:common:v1#/$defs/reference"
+          }
+        },
+        "complete_set": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "records",
+        "references",
+        "complete_set"
+      ],
+      "additionalProperties": false
+    },
+    "task_context": {
+      "type": "object",
+      "properties": {
+        "task": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "minLength": 1
+            },
+            "kind": {
+              "enum": [
+                "execution",
+                "reasoning",
+                "hybrid"
+              ]
+            },
+            "instruction_scope": {
+              "enum": [
+                "full_task",
+                "current_segment",
+                "unspecified"
+              ]
+            },
+            "segment_id": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "text",
+            "kind"
+          ],
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "if": {
+                "required": [
+                  "instruction_scope"
+                ],
+                "properties": {
+                  "instruction_scope": {
+                    "const": "current_segment"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "segment_id"
+                ]
+              }
+            }
+          ]
+        },
+        "goals": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:context-design:payload:v1#/$defs/goal"
+          }
+        },
+        "procedure": {
+          "type": "object",
+          "properties": {
+            "completion": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/condition"
+              }
+            },
+            "loops": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/condition"
+              }
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:context-design:common:v1#/$defs/reference"
+          }
+        }
+      },
+      "required": [
+        "task",
+        "goals",
+        "procedure",
+        "references"
+      ],
+      "additionalProperties": false
+    },
+    "condition": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "fact_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "equals": {}
+          },
+          "required": [
+            "fact_id",
+            "equals"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "all": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/condition"
+              }
+            }
+          },
+          "required": [
+            "all"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "any": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/condition"
+              }
+            }
+          },
+          "required": [
+            "any"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "not": {
+              "$ref": "#/$defs/condition"
+            }
+          },
+          "required": [
+            "not"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}
