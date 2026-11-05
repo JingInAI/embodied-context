@@ -83,10 +83,10 @@ python -B -c 'from importlib.metadata import distribution; print(distribution("e
 | `context_components/` | 实际运行的组件代码、输入输出规则和已生成的评测目录。 |
 | `pyproject.toml` | 安装配置；安装包不包含研究资料、测试或样例。 |
 | `README.md` | 使用说明。 |
-| `tests/` | 当前渲染功能的离线回归测试。 |
-| `tmp/`（历史资料） | `v1` 分支中的研究快照、流程图、样例、旧测试和验收记录；当前 `master` 不包含该目录。 |
+| `tmp/tests/` | 组件、适配器、集成和渲染功能的全部离线回归测试。 |
+| `tmp/` | `v1` 分支中的开发与维护资料，包括研究快照、流程图、样例、测试和历史验收记录；当前 `master` 不包含该目录。 |
 
-正常安装和下面的入门示例均不依赖 `tmp/`。历史资料可在 [v1 分支](https://github.com/JingInAI/embodied-context/tree/v1/tmp) 查看，包括 [执行流程图 PNG](https://github.com/JingInAI/embodied-context/blob/v1/tmp/pipeline/scripts_v1_execution_flow.png)、[SVG](https://github.com/JingInAI/embodied-context/blob/v1/tmp/pipeline/scripts_v1_execution_flow.svg) 和 [维护资料说明](https://github.com/JingInAI/embodied-context/blob/v1/tmp/README.md)。历史分支不代表当前 `master` 的最新实现。
+正常安装和下面的入门示例均不依赖 `tmp/`。历史资料可在 [v1 分支](https://github.com/JingInAI/embodied-context/tree/v1/tmp) 查看，包括 [执行流程图 PNG](https://github.com/JingInAI/embodied-context/blob/v1/tmp/pipeline/scripts_v1_execution_flow.png)、[SVG](https://github.com/JingInAI/embodied-context/blob/v1/tmp/pipeline/scripts_v1_execution_flow.svg) 和 [维护资料说明](https://github.com/JingInAI/embodied-context/blob/v1/tmp/README.md)。`v1` 已合入本次 `master` 更新；其中的历史报告仍只对应报告生成时的代码。
 
 **先运行一个例子**
 
@@ -406,10 +406,10 @@ CLI 不会根据请求中的工具名字自动加载执行代码；要注入实�
 
 **验证结果和继续查阅**
 
-本次英文说明和三种显示形式的离线回归测试位于 `tests/test_render_presentation.py`。从本目录运行：
+全部离线测试统一放在 `tmp/tests/`，其中 `test_render_presentation.py` 覆盖英文说明和三种显示形式。从包含该目录的 `v1` 项目根目录运行：
 
 ```bash
-python -B -m unittest discover -s tests -v
+python -B -m unittest discover -s tmp/tests -v
 ```
 
 测试覆盖十个组件、三种显示形式、完整 JSON 的保留、上下游传递、历史状态、媒体引用、增量交付、精度和预算。`v1` 分支中的历史验收报告不代表本次改动已完成模型或机器人评测。
@@ -421,9 +421,6 @@ python -B -m unittest discover -s tests -v
 下面是**可选的历史维护命令**，不是安装或普通调用步骤。仅在原始 `context_modules/scripts_v1/` 工作区中，且已经具备完整的 `tmp/`、`../docs/`、`../scripts/` 及维护工具要求的来源文件时使用；独立克隆当前 `master` 后不能直接运行这些命令。路径仍以组件项目根目录为基准：
 
 ```bash
-# 运行 tmp 中的历史组件测试。
-python -B -m unittest discover -s tmp/tests -v
-
 # 运行原工作区的验收工具并更新报告；需要历史资料及相邻设计目录。
 python -B tmp/verify_release.py
 

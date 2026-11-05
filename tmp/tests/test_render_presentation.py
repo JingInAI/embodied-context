@@ -14,7 +14,7 @@ from context_components.presentation import FIELD_NOTES, TITLES, parameter_notes
 from context_components.render import apply_delta, render_context
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 SCOPE = dict(run_id='render-test', task_id='custom-task', epoch_id='scene', turn_index=0)
 CLOCK = dict(clock_id='sim', clock_epoch='scene', unit='s', value=0)
 OPTS = dict(receiver_id='agent', session_id='conversation')
