@@ -1,0 +1,70 @@
+{
+  "input": {
+    "cameras": [
+      {
+        "distortion": "none",
+        "frame_id": "camera",
+        "id": "front",
+        "image_size": [
+          640,
+          480
+        ],
+        "intrinsics": {
+          "cx": 320,
+          "cy": 240,
+          "fx": 320,
+          "fy": 320
+        },
+        "model": "pinhole",
+        "pixel_origin": "top_left",
+        "pixel_centers": "integer_coordinates",
+        "evidence_refs": [
+          "calibration"
+        ]
+      }
+    ],
+    "frames": [
+      {
+        "forward_axis": "+z",
+        "handedness": "right",
+        "id": "camera",
+        "length_unit": "m",
+        "x_axis": "right",
+        "y_axis": "down"
+      }
+    ],
+    "queries": [
+      {
+        "camera_id": "front",
+        "frame_id": "camera",
+        "id": "q1",
+        "kind": "project",
+        "point": [
+          0.1,
+          0.2,
+          1
+        ]
+      }
+    ]
+  },
+  "references": [
+    {
+      "id": "calibration",
+      "inline": {
+        "cx": 320,
+        "cy": 240,
+        "fx": 320,
+        "fy": 320
+      },
+      "media_type": "application/json",
+      "source_kind": "synthetic"
+    }
+  ],
+  "schema_version": "context.v1",
+  "scope": {
+    "epoch_id": "projection-epoch",
+    "run_id": "synthetic-design",
+    "task_id": "projection",
+    "turn_index": 0
+  }
+}

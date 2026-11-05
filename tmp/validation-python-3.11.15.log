@@ -1,0 +1,40 @@
+test_all_adapters_reject_version_mode_task_and_publication_conflicts (test_adapters.AdaptersTest.test_all_adapters_reject_version_mode_task_and_publication_conflicts) ... ok
+test_all_eleven_modes_transform_and_render (test_adapters.AdaptersTest.test_all_eleven_modes_transform_and_render) ... ok
+test_casa_interface_identity_and_cerebra_segments (test_adapters.AdaptersTest.test_casa_interface_identity_and_cerebra_segments) ... ok
+test_every_catalog_identity_is_mapped (test_adapters.AdaptersTest.test_every_catalog_identity_is_mapped) ... ok
+test_metaworld_hidden_goal_and_robotwin_disabled_modality (test_adapters.AdaptersTest.test_metaworld_hidden_goal_and_robotwin_disabled_modality) ... ok
+test_robomme_list_roles_and_all_interfaces (test_adapters.AdaptersTest.test_robomme_list_roles_and_all_interfaces) ... ok
+test_vlabench_all_tracks_dimensions_and_example_boundary (test_adapters.AdaptersTest.test_vlabench_all_tracks_dimensions_and_example_boundary) ... ok
+test_boolean_output_schemas_and_rule_references (test_components.ComponentsTest.test_boolean_output_schemas_and_rule_references) ... ok
+test_bounded_memory_duplicate_revision_retraction (test_components.ComponentsTest.test_bounded_memory_duplicate_revision_retraction) ... ok
+test_composition_scope_cycle_and_independent_failure (test_components.ComponentsTest.test_composition_scope_cycle_and_independent_failure) ... ok
+test_conflicting_event_revision_and_source_run (test_components.ComponentsTest.test_conflicting_event_revision_and_source_run) ... ok
+test_delivery_full_delta_retention_and_budget (test_components.ComponentsTest.test_delivery_full_delta_retention_and_budget) ... ok
+test_depth_source_profiles (test_components.ComponentsTest.test_depth_source_profiles) ... ok
+test_execution_never_substitutes_accepted_count (test_components.ComponentsTest.test_execution_never_substitutes_accepted_count) ... ok
+test_local_response_estimation_and_no_extrapolation (test_components.ComponentsTest.test_local_response_estimation_and_no_extrapolation) ... ok
+test_original_design_requests_execute (test_components.ComponentsTest.test_original_design_requests_execute) ... ok
+test_output_candidate_preserved_and_unknown_rule (test_components.ComponentsTest.test_output_candidate_preserved_and_unknown_rule) ... ok
+test_published_utf8_text_observation (test_components.ComponentsTest.test_published_utf8_text_observation) ... ok
+test_resolver_hash_links_fifo_and_no_implicit_reads (test_components.ComponentsTest.test_resolver_hash_links_fifo_and_no_implicit_reads) ... ok
+test_resource_clock_and_units (test_components.ComponentsTest.test_resource_clock_and_units) ... ok
+test_spatial_design_arithmetic_and_failure_modes (test_components.ComponentsTest.test_spatial_design_arithmetic_and_failure_modes) ... ok
+test_spatial_projection_and_partial_results (test_components.ComponentsTest.test_spatial_projection_and_partial_results) ... ok
+test_state_cas_conflict_and_idempotency (test_components.ComponentsTest.test_state_cas_conflict_and_idempotency) ... ok
+test_strict_json_precision_and_identity (test_components.ComponentsTest.test_strict_json_precision_and_identity) ... ok
+test_task_dependency_evidence_and_unknown (test_components.ComponentsTest.test_task_dependency_evidence_and_unknown) ... ok
+test_tool_call_resources_survive_delivery (test_components.ComponentsTest.test_tool_call_resources_survive_delivery) ... ok
+test_tools_explicit_injection_and_late_result (test_components.ComponentsTest.test_tools_explicit_injection_and_late_result) ... ok
+test_transform_reverse_units_and_conflicting_paths (test_components.ComponentsTest.test_transform_reverse_units_and_conflicting_paths) ... ok
+test_all_benchmarks_history_and_scope_rejection (test_integration.IntegrationTest.test_all_benchmarks_history_and_scope_rejection) ... ok
+test_cli_stdin_files_relocation_and_preservation (test_integration.IntegrationTest.test_cli_stdin_files_relocation_and_preservation) ... ok
+test_geometry_tool_extension_and_shared_budget (test_integration.IntegrationTest.test_geometry_tool_extension_and_shared_budget) ... ok
+test_plain_text_and_exact_resource_contracts (test_integration.IntegrationTest.test_plain_text_and_exact_resource_contracts) ... ok
+test_response_hull_expiry_and_history (test_integration.IntegrationTest.test_response_hull_expiry_and_history) ... ok
+test_retraction_reopens_downstream_goal (test_integration.IntegrationTest.test_retraction_reopens_downstream_goal) ... ok
+test_terminal_reset_and_dataset_boundaries (test_integration.IntegrationTest.test_terminal_reset_and_dataset_boundaries) ... ok
+
+----------------------------------------------------------------------
+Ran 35 tests in 19.616s
+
+OK

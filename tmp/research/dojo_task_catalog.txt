@@ -1,0 +1,182 @@
+# RoboDojo 完整任务目录
+
+核对日期：2026-10-23。官方核心集合为 **42 个仿真任务与 18 个真实任务**；下表全部列出，并另列随机变体和辅助 DLC。中文目标根据各任务官方页面整理；仿真步数来自固定代码的 `self.step_lim`，不是模型调用次数，也不能直接按 PhysX 的 `dt` 换算。
+
+2026-10-26：本目录的 54 个仿真执行标识将按[官方原生迁移计划](../../superpowers/plans/2026-10-25-robodojo-agenttest-integration-plan.md)生成 AgentTest task，保留官方类名、布局与 overrides。当前只有资料，正式 `tasks-robodojo/` 尚未生成；本轮未改变任务/步数统计。
+
+## 任务身份与计数
+
+| 口径 | 数量 | 说明 |
+| --- | ---: | --- |
+| 五维核心仿真任务 | 42 | 12＋6＋8＋8＋8 |
+| Generalization 随机变体 | 12 | 各基础任务增加一个 `_random` 标识 |
+| 当前仿真可执行标识 | 54 | 固定代码中均有任务类与配置 |
+| 仿真网页条目 | 43 | 核心 42 加 DLC，随机变体并入基础任务页面 |
+| 仿真训练目录 | 35 | 非 Open 的 34 题加 DLC |
+| 真实任务 | 18 | 三种机器人各 6 题 |
+
+来源：[官网仿真目录](https://robodojo-benchmark.com/doc/sim-tasks/)、[代码任务清单](https://github.com/RoboDojo-Benchmark/RoboDojo/blob/f57e1633ffed59761bc8e568cfe7530c4b33381c/scripts/internal/task_inventory.py)、[当前任务源码](https://github.com/RoboDojo-Benchmark/RoboDojo/tree/f57e1633ffed59761bc8e568cfe7530c4b33381c/task/RoboDojo/tasks)。DLC 在数据和网页中存在，但固定代码的可执行任务目录没有 `dlc.py`，不应自动加入正式评测任务。
+
+以下仿真表的 **D** 表示程序生成 `datagen`，**T** 表示遥操作 `teleop`，**—** 表示没有任务专属训练示范。D/T 任务每题均为 100 条示范。每个任务名链接到包含演示视频、说明及评分条件的官方页面。
+
+## 2026-10-26 全54题源码与配置复核
+
+[机读清单](native-task-review-20261026.json)记录54对Python/YAML的固定URL/摘要、class/horizon、维度/variant、_task.yml合并设置与Traj引用；它是研究清单，尚未绑定真实资产/布局/角色镜像。四个配置纯函数的局部检查见[静态记录](native-deep-review-checks-20261026.json)，未导入Isaac。
+
+| 特殊行为 | 执行标识/范围 |
+| --- | --- |
+| 支持Franka与Traj | imitate_sorting_sequence、make_kong、play_tic_tac_toe |
+| conveyor场景 | match_and_pick_from_conveyor、pick_from_conveyor_by_image |
+| render_interval=5 | fill_egg_holder、store_laptop_and_headphones、store_laptop_and_headphones_random |
+| teleop触发stabilization | 23标识，逐项见清单；不能只作训练数据标签 |
+| self_collision覆盖 | 逐题保留，包括fill_egg_holder、press_by_number、swap_blocks等 |
+
+54标识各一回合最多43,050个外部动作，正式一组1,640,000；Oracle m=10分别最多4,305和164,000次预测。物理插值步另计。任务发现/配置、输入闭包与故障处理见[迁移流程](migration-workflow.md)和[问题F05–F08](migration-troubleshooting.md)。
+## Generalization 泛化
+
+12 题。每题正式预算为 25 个标准布局加 25 个随机布局。训练示范采用标准设置；随机化覆盖杂物、桌面与地板材质、灯光和背景。它考察同一操作目标在视觉与布局变化中的稳定性。[随机化说明](https://robodojo-benchmark.com/doc/sim-tasks/domain-randomization/)
+
+| 任务标识 | 中文目标及关键约束 | 来源 | 步数上限 |
+| --- | --- | :---: | ---: |
+| [stack_bowls](https://robodojo-benchmark.com/doc/sim-tasks/stack-bowls/) | 把三个碗叠在一起 | T | 800 |
+| [push_T](https://robodojo-benchmark.com/doc/sim-tasks/push-t/) | 推动 T 形块，使其与灰色 T 形薄垫对准 | T | 600 |
+| [pack_objects_into_box](https://robodojo-benchmark.com/doc/sim-tasks/pack-objects-into-box/) | 将所有物体放进箱子，并使正面朝左 | T | 1300 |
+| [fold_clothes](https://robodojo-benchmark.com/doc/sim-tasks/fold-clothes/) | 整齐折叠衣物，涉及柔性对象 | D | 500 |
+| [hang_mugs](https://robodojo-benchmark.com/doc/sim-tasks/hang-mugs/) | 将三个杯子逐个挂上杯架 | T | 800 |
+| [sweep_blocks](https://robodojo-benchmark.com/doc/sim-tasks/sweep-blocks/) | 左右手交接扫帚，右手扫、左手持簸箕，将块扫入 | T | 1000 |
+| [pour_liquid_into_cup](https://robodojo-benchmark.com/doc/sim-tasks/pour-liquid-into-cup/) | 抓瓶并将液体倒入杯子 | T | 400 |
+| [make_toast](https://robodojo-benchmark.com/doc/sim-tasks/make-toast/) | 把两片面包插入烤面包机，压下启动杆 | T | 1400 |
+| [arrange_largest_number](https://robodojo-benchmark.com/doc/sim-tasks/arrange-largest-number/) | 判断四个数字组成最大数的顺序，再按序摆放 | D | 1050 |
+| [sort_nesting_dolls_by_size](https://robodojo-benchmark.com/doc/sim-tasks/sort-nesting-dolls-by-size/) | 将五个套娃从左到右按小到大排成直线 | D | 1050 |
+| [store_laptop_and_headphones](https://robodojo-benchmark.com/doc/sim-tasks/store-laptop-and-headphones/) | 先挂耳机，再合上笔记本并插入竖直支架 | T | 800 |
+| [stack_blocks](https://robodojo-benchmark.com/doc/sim-tasks/stack-blocks/) | 将三个不同纹理的块堆成稳定的叠层 | D | 550 |
+
+12 个随机变体的准确标识为：
+
+```text
+stack_bowls_random
+push_T_random
+pack_objects_into_box_random
+fold_clothes_random
+hang_mugs_random
+sweep_blocks_random
+pour_liquid_into_cup_random
+make_toast_random
+arrange_largest_number_random
+sort_nesting_dolls_by_size_random
+store_laptop_and_headphones_random
+stack_blocks_random
+```
+
+这些变体在固定代码中与对应基础任务具有相同 `step_lim`。标准和随机任务各使用 `eval_nums: 25`；不要把 54 个可执行标识全部统一设置成 50 回合后仍称作官方 2,100 回合协议。[逐任务公共配置](https://github.com/RoboDojo-Benchmark/RoboDojo/blob/f57e1633ffed59761bc8e568cfe7530c4b33381c/task/RoboDojo/config/_task.yml)
+
+## Memory 记忆
+
+6 题，每题正式默认 50 回合。它们分别考察遮挡后的身份、短暂目标、原始空间位置、计数和动作序列等记忆。
+
+| 任务标识 | 中文目标及关键约束 | 来源 | 步数上限 |
+| --- | --- | :---: | ---: |
+| [cover_blocks](https://robodojo-benchmark.com/doc/sim-tasks/cover-blocks/) | 从左到右盖住三色块，记住对应关系，再按红、绿、蓝揭盖 | D | 800 |
+| [match_and_pick_from_conveyor](https://robodojo-benchmark.com/doc/sim-tasks/match-and-pick-from-conveyor/) | 记住先出现并离开的物体，从后续传送带物体中抓取匹配项 | T | 700 |
+| [swap_blocks](https://robodojo-benchmark.com/doc/sim-tasks/swap-blocks/) | 借第三个空垫交换两块的位置，每移动一次都要按按钮 | D | 700 |
+| [swap_T](https://robodojo-benchmark.com/doc/sim-tasks/swap-t/) | 双手交换两块 T 形物体，匹配对方原来的位置与姿态 | D | 400 |
+| [press_by_number](https://robodojo-benchmark.com/doc/sim-tasks/press-by-number/) | 读取两张数字卡，按对应次数操作红按钮，再按蓝色确认键 | D | 700 |
+| [imitate_sorting_sequence](https://robodojo-benchmark.com/doc/sim-tasks/imitate-sorting-sequence/) | 观察对侧机器人放置五类物体的顺序，再照相同顺序分类 | D | 1600 |
+
+`press_by_number` 页面内部存在描述差异：简介称按蓝色确认键立即结束，但同页 100 分条件要求先完成 button0 次数并确认，再完成 button1 次数并再次确认，最后归位。固定代码也注册两次蓝键计数及对应顺序，所以接入不能自行增加“首次蓝键即终止”规则，错误计数和结束仍交由官方判据判断。[任务页面](https://robodojo-benchmark.com/doc/sim-tasks/press-by-number/) · [固定任务实现](https://github.com/RoboDojo-Benchmark/RoboDojo/blob/f57e1633ffed59761bc8e568cfe7530c4b33381c/task/RoboDojo/tasks/press_by_number.py)
+
+`imitate_sorting_sequence` 使用额外支持机械臂，其配置不完全等同普通双 X5 场景，接入时必须保留任务覆盖。[公共机器人配置](https://github.com/RoboDojo-Benchmark/RoboDojo/blob/f57e1633ffed59761bc8e568cfe7530c4b33381c/task/RoboDojo/config/_task.yml)
+
+## Precision 精度
+
+8 题，每题正式默认 50 回合。位姿误差、接触稳定性、夹爪松开条件与任务完成后的返回动作都可能参与判定。
+
+| 任务标识 | 中文目标及关键约束 | 来源 | 步数上限 |
+| --- | --- | :---: | ---: |
+| [fasten_screws](https://robodojo-benchmark.com/doc/sim-tasks/fasten-screws/) | 三组同色螺纹件配对、插入并拧紧，可先放中间完成换手 | D | 1900 |
+| [plug_in_charger](https://robodojo-benchmark.com/doc/sim-tasks/plug-in-charger/) | 将充电器插头插进插线板 | D | 400 |
+| [insert_tubes](https://robodojo-benchmark.com/doc/sim-tasks/insert-tubes/) | 将三根试管逐个插入架中 | D | 500 |
+| [pour_balls_into_vase](https://robodojo-benchmark.com/doc/sim-tasks/pour-balls-into-vase/) | 将杯中的小球倒入花瓶 | T | 600 |
+| [play_Xylophone](https://robodojo-benchmark.com/doc/sim-tasks/play-xylophone/) | 持槌从左到右敲击全部木琴琴键 | D | 500 |
+| [deposit_coin](https://robodojo-benchmark.com/doc/sim-tasks/deposit-coin/) | 拿起支架上的硬币，准确插入储蓄罐槽口 | D | 300 |
+| [insert_key](https://robodojo-benchmark.com/doc/sim-tasks/insert-key/) | 拿钥匙、换手调姿、插入锁孔并转动 | D | 300 |
+| [build_tower](https://robodojo-benchmark.com/doc/sim-tasks/build-tower/) | 交替放板与块，保持逐层居中和直立 | D | 1050 |
+
+例如 `fasten_screws` 的公开分级为 0、20、50、100；满分要求三组全部正确固定、夹爪张开并返回原位。因此“已经接触螺母”与完整成功有明显距离。[螺纹任务评分](https://robodojo-benchmark.com/doc/sim-tasks/fasten-screws/)
+
+## Long-Horizon 长程
+
+8 题，每题正式默认 50 回合。多对象处理、双臂交接和子目标先后顺序是主要难点。
+
+| 任务标识 | 中文目标及关键约束 | 来源 | 步数上限 |
+| --- | --- | :---: | ---: |
+| [fill_pen_holder](https://robodojo-benchmark.com/doc/sim-tasks/fill-pen-holder/) | 一手持笔筒，另一手逐支装笔，最后放下笔筒 | T | 1100 |
+| [classify_objects](https://robodojo-benchmark.com/doc/sim-tasks/classify-objects/) | 将三类物体分别放入三个篮子，同类须放在一起 | T | 1100 |
+| [put_bottles_into_dustbin](https://robodojo-benchmark.com/doc/sim-tasks/put-bottles-into-dustbin/) | 将四瓶丢入侧面垃圾桶，右侧瓶可能需要换手 | T | 700 |
+| [play_tic_tac_toe](https://robodojo-benchmark.com/doc/sim-tasks/play-tic-tac-toe/) | 与随机对手轮流在 3×3 棋盘落子直至棋盘填满 | D | 1100 |
+| [fill_egg_holder](https://robodojo-benchmark.com/doc/sim-tasks/fill-egg-holder/) | 将篮中四个蛋放入蛋盒后合盖 | T | 700 |
+| [organize_table](https://robodojo-benchmark.com/doc/sim-tasks/organize-table/) | 整理鼠标、键盘、摆件与闹钟，再开抽屉收纳杂物 | T | 1000 |
+| [make_kong](https://robodojo-benchmark.com/doc/sim-tasks/make-kong/) | 观察对手打出的麻将牌，找到匹配牌并完成杠牌 | D | 600 |
+| [play_stacking_toy](https://robodojo-benchmark.com/doc/sim-tasks/play-stacking-toy/) | 将数量为 4、3、2、1 的四类玩具片套到匹配立柱 | D | 1200 |
+
+井字棋和麻将任务涉及对侧支持机器人，但不能仅根据游戏名称把“获胜”当作全部完成判据；具体过程评分和终止以任务页面及源码为准。
+
+## Open 开放条件任务
+
+8 题，每题正式默认 50 回合，**无任务专属训练示范**。Open 在这里包括新物体、新语言组合、图像目标与规则理解，不等于可以任意生成任务并套用官方成绩。
+
+| 任务标识 | 中文目标及关键约束 | 来源 | 步数上限 |
+| --- | --- | :---: | ---: |
+| [align_blocks](https://robodojo-benchmark.com/doc/sim-tasks/align-blocks/) | 用三角尺推动三个块，使其平行并排成直线 | — | 200 |
+| [general_pickup](https://robodojo-benchmark.com/doc/sim-tasks/general-pickup/) | 按语言识别目标物体并抓起 | — | 200 |
+| [solve_equation](https://robodojo-benchmark.com/doc/sim-tasks/solve-equation/) | 选择缺失数字或运算符，补全桌上的算式 | — | 300 |
+| [stack_blocks_by_language](https://robodojo-benchmark.com/doc/sim-tasks/stack-blocks-by-language/) | 按指令要求的颜色顺序堆块 | — | 400 |
+| [classify_objects_by_language](https://robodojo-benchmark.com/doc/sim-tasks/classify-objects-by-language/) | 识别未见物体类别，并按指令指定的左右篮子顺序分类 | — | 1100 |
+| [pick_from_conveyor_by_image](https://robodojo-benchmark.com/doc/sim-tasks/pick-from-conveyor-by-image/) | 先举篮超过 8 cm，再依据图板识别传送带目标并放入篮中 | — | 700 |
+| [store_tools_in_toolbox](https://robodojo-benchmark.com/doc/sim-tasks/store-tools-in-toolbox/) | 将多种工具放进工具箱的对应槽位 | — | 900 |
+| [pour_by_language](https://robodojo-benchmark.com/doc/sim-tasks/pour-by-language/) | 按颜色与语言对应关系，把指定瓶中液体倒入指定碗 | — | 800 |
+
+## DLC 辅助数据
+
+官网 [DLC 页面](https://robodojo-benchmark.com/doc/sim-tasks/dlc/)描述在杂乱桌面和复杂背景中识别字母、排成 RoboDojo；数据来源为 DataGen，固定 HF 的 `data/RoboDojo/dlc/arx_x5/data/` 含 100 条轨迹。DLC 用于补充随机场景经验，独立于五维 42 题评分；不要给它人为添加一个正式评测权重。
+
+## 真实任务
+
+官方按机器人具身组织真实任务，没有直接沿用仿真的五维分组。各题均有 100 条遥操作示范；正式评测每策略每题 10 回合。下表列出公开评分节点，**原始人工评分通常为 0–1，排行榜可显示为 0–100**。[真实目录](https://robodojo-benchmark.com/doc/real-tasks/)
+
+### Piper X
+
+| 任务标识 | 目标及完成条件提示 | 原始评分节点 |
+| --- | --- | --- |
+| [disassemble_LEGO](https://robodojo-benchmark.com/doc/real-tasks/disassemble-lego/) | 拆开积木并逐件入碗；最后一件还有放桌上、左夹爪再取的要求 | 0 / 0.2 / 0.5 / 1 |
+| [cap_pen](https://robodojo-benchmark.com/doc/real-tasks/cap-pen/) | 双手取笔与笔帽，对准并套上；拿起两件只得部分分 | 0 / 0.2 / 1 |
+| [classify_objects](https://robodojo-benchmark.com/doc/real-tasks/classify-objects/) | 两类物体放入正确的两个篮子 | 0 / 0.4 / 1 |
+| [hang_mugs](https://robodojo-benchmark.com/doc/real-tasks/hang-mugs/) | 依次挂好三个杯子 | 0 / 0.2 / 0.5 / 1 |
+| [sweep_blocks](https://robodojo-benchmark.com/doc/real-tasks/sweep-blocks/) | 交接工具并将块扫进簸箕 | 0 / 1 |
+| [pack_objects_into_backpack](https://robodojo-benchmark.com/doc/real-tasks/pack-objects-into-backpack/) | 将三个物体装入背包 | 0 / 0.2 / 0.5 / 1 |
+
+### Piper
+
+| 任务标识 | 目标及完成条件提示 | 原始评分节点 |
+| --- | --- | --- |
+| [fill_pen_holder](https://robodojo-benchmark.com/doc/real-tasks/fill-pen-holder/) | 持筒逐支装入三支笔，最后将笔筒放下 | 0 / 0.2 / 0.4 / 0.8 / 1 |
+| [put_objects_into_basket](https://robodojo-benchmark.com/doc/real-tasks/put-objects-into-basket/) | 所有物体放进篮子，未全部完成为 0 | 0 / 1 |
+| [stack_and_cover_blocks](https://robodojo-benchmark.com/doc/real-tasks/stack-and-cover-blocks/) | 堆好三个块后用杯子罩住 | 0 / 0.5 / 1 |
+| [stack_bowls](https://robodojo-benchmark.com/doc/real-tasks/stack-bowls/) | 在中央叠好三个碗 | 0 / 0.3 / 1 |
+| [stand_up_bottles](https://robodojo-benchmark.com/doc/real-tasks/stand-up-bottles/) | 将瓶子扶正；评分表按一、二、三个瓶分别计分 | 0 / 0.2 / 0.5 / 1 |
+| [insert_charger](https://robodojo-benchmark.com/doc/real-tasks/insert-charger/) | 先插充电头，再把充电线接到充电头 | 0 / 0.5 / 1 |
+
+`stand_up_bottles` 页面描述文字以单个瓶子举例，评分表却明确到三个瓶子；复现时需要依评分与实际场景进一步核对，不能只用标题推断物体数量。
+
+### ARX X5
+
+| 任务标识 | 目标及完成条件提示 | 原始评分节点 |
+| --- | --- | --- |
+| [insert_tubes](https://robodojo-benchmark.com/doc/real-tasks/insert-tubes/) | 三根试管完全插入架中，第一根需到达底部 | 0 / 0.2 / 0.5 / 1 |
+| [make_bread](https://robodojo-benchmark.com/doc/real-tasks/make-bread/) | 两片面包放入烤面包机，再把两只小碗放上盘子 | 0 / 0.7 / 1 |
+| [make_food](https://robodojo-benchmark.com/doc/real-tasks/make-food/) | 摆放砧板、刀与牛排，蔬菜虾入锅，锅放炉上并盖好 | 0 / 0.3 / 0.5 / 0.7 / 1 |
+| [pack_and_pour_fruit](https://robodojo-benchmark.com/doc/real-tasks/pack-and-pour-fruit/) | 三个水果逐个放小碗，再把小碗水果全部倒入大碗 | 0 / 0.2 / 0.4 / 0.6 / 1 |
+| [cover_blocks](https://robodojo-benchmark.com/doc/real-tasks/cover-blocks/) | 盖住三块后按红、绿、蓝顺序揭盖 | 0 / 0.05 / 0.15 / 0.3 / 1 |
+| [store_in_safe](https://robodojo-benchmark.com/doc/real-tasks/store-in-safe/) | 三个玩偶放入保险箱，将箱拉至桌中并合盖 | 0 / 0.4 / 1 |
+
+同名仿真与真实任务可能具有不同场景、对象数量、子目标和评分尺度。例如仿真 `plug_in_charger` 与真实 `insert_charger` 的标识、动作链均不同。任务身份至少应包含 benchmark、sim/real、任务名、具身和协议版本。

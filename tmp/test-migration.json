@@ -1,0 +1,1197 @@
+{
+  "original_test_count": 107,
+  "entries": [
+    {
+      "original_file": "scripts/control_response_context/test_control_response_context.py",
+      "test": "test_empirical_candidate_selection_and_prior_error",
+      "disposition": "adapt",
+      "component": "response_evidence",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_local_response_estimation_and_no_extrapolation",
+        "test_integration.IntegrationTest.test_response_hull_expiry_and_history"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/control_response_context/test_control_response_context.py",
+      "test": "test_new_observations_change_model_and_compensation",
+      "disposition": "adapt",
+      "component": "response_evidence",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_local_response_estimation_and_no_extrapolation",
+        "test_integration.IntegrationTest.test_response_hull_expiry_and_history"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/control_response_context/test_control_response_context.py",
+      "test": "test_empty_history_does_not_invent_coefficients",
+      "disposition": "adapt",
+      "component": "response_evidence",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_local_response_estimation_and_no_extrapolation",
+        "test_integration.IntegrationTest.test_response_hull_expiry_and_history"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/control_response_context/test_control_response_context.py",
+      "test": "test_insufficient_local_samples",
+      "disposition": "adapt",
+      "component": "response_evidence",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_local_response_estimation_and_no_extrapolation",
+        "test_integration.IntegrationTest.test_response_hull_expiry_and_history"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/control_response_context/test_control_response_context.py",
+      "test": "test_unexecuted_and_incomplete_are_excluded",
+      "disposition": "adapt",
+      "component": "response_evidence",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_local_response_estimation_and_no_extrapolation",
+        "test_integration.IntegrationTest.test_response_hull_expiry_and_history"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/control_response_context/test_control_response_context.py",
+      "test": "test_stale_evidence_expires_without_new_records",
+      "disposition": "adapt",
+      "component": "response_evidence",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_local_response_estimation_and_no_extrapolation",
+        "test_integration.IntegrationTest.test_response_hull_expiry_and_history"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/control_response_context/test_control_response_context.py",
+      "test": "test_condition_change_or_unknown_withholds",
+      "disposition": "adapt",
+      "component": "response_evidence",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_local_response_estimation_and_no_extrapolation",
+        "test_integration.IntegrationTest.test_response_hull_expiry_and_history"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/control_response_context/test_control_response_context.py",
+      "test": "test_time_decay_affects_response_estimate",
+      "disposition": "adapt",
+      "component": "response_evidence",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_local_response_estimation_and_no_extrapolation",
+        "test_integration.IntegrationTest.test_response_hull_expiry_and_history"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/control_response_context/test_control_response_context.py",
+      "test": "test_single_dominating_weight_is_not_sufficient",
+      "disposition": "adapt",
+      "component": "response_evidence",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_local_response_estimation_and_no_extrapolation",
+        "test_integration.IntegrationTest.test_response_hull_expiry_and_history"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/control_response_context/test_control_response_context.py",
+      "test": "test_response_dispersion_withholds",
+      "disposition": "adapt",
+      "component": "response_evidence",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_local_response_estimation_and_no_extrapolation",
+        "test_integration.IntegrationTest.test_response_hull_expiry_and_history"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/control_response_context/test_control_response_context.py",
+      "test": "test_no_extrapolation_even_inside_radius",
+      "disposition": "adapt",
+      "component": "response_evidence",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_local_response_estimation_and_no_extrapolation",
+        "test_integration.IntegrationTest.test_response_hull_expiry_and_history"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/control_response_context/test_control_response_context.py",
+      "test": "test_categorical_controls_and_responses",
+      "disposition": "adapt",
+      "component": "response_evidence",
+      "reason": "Categorical values are exact matching conditions; the builtin estimator predicts numeric responses only, as specified in draft-5.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_local_response_estimation_and_no_extrapolation",
+        "test_integration.IntegrationTest.test_response_hull_expiry_and_history"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/control_response_context/test_control_response_context.py",
+      "test": "test_joint_controls_require_matching_categories",
+      "disposition": "adapt",
+      "component": "response_evidence",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_local_response_estimation_and_no_extrapolation",
+        "test_integration.IntegrationTest.test_response_hull_expiry_and_history"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/control_response_context/test_control_response_context.py",
+      "test": "test_missing_target_or_candidates_withholds_compensation_only",
+      "disposition": "retire",
+      "component": "response_evidence",
+      "reason": "Automatic compensation/action proposal is outside the confirmed context-only boundary.",
+      "related_new_tests": [],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/control_response_context/test_control_response_context.py",
+      "test": "test_nominal_is_kept_when_candidates_are_worse",
+      "disposition": "retire",
+      "component": "response_evidence",
+      "reason": "Selection/submission of a control candidate is external; context only compares published candidates.",
+      "related_new_tests": [],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/control_response_context/test_control_response_context.py",
+      "test": "test_validation",
+      "disposition": "adapt",
+      "component": "response_evidence",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_local_response_estimation_and_no_extrapolation",
+        "test_integration.IntegrationTest.test_response_hull_expiry_and_history"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/control_response_context/test_control_response_context.py",
+      "test": "test_strict_json_and_scope",
+      "disposition": "retain_behavior",
+      "component": "response_evidence",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_strict_json_precision_and_identity"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/control_response_context/test_control_response_context.py",
+      "test": "test_history_and_context_limits",
+      "disposition": "adapt",
+      "component": "response_evidence",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_local_response_estimation_and_no_extrapolation",
+        "test_integration.IntegrationTest.test_response_hull_expiry_and_history"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/control_response_context/test_control_response_context.py",
+      "test": "test_cli_stdin_files_and_path_protection",
+      "disposition": "adapt",
+      "component": "response_evidence",
+      "reason": "Independent CLI rejects existing outputs and uses explicit resource maps; old task-relative absolute paths are retired.",
+      "related_new_tests": [
+        "test_integration.IntegrationTest.test_cli_stdin_files_relocation_and_preservation"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/per_call_evidence_context/test_per_call_evidence_context.py",
+      "test": "test_compact_index_and_no_payload_duplication",
+      "disposition": "adapt",
+      "component": "evidence_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_resolver_hash_links_fifo_and_no_implicit_reads"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/per_call_evidence_context/test_per_call_evidence_context.py",
+      "test": "test_initial_input_only",
+      "disposition": "adapt",
+      "component": "evidence_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_resolver_hash_links_fifo_and_no_implicit_reads"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/per_call_evidence_context/test_per_call_evidence_context.py",
+      "test": "test_scope_mismatch_rejected",
+      "disposition": "adapt",
+      "component": "evidence_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_resolver_hash_links_fifo_and_no_implicit_reads"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/per_call_evidence_context/test_per_call_evidence_context.py",
+      "test": "test_missing_traversal_symlink_and_fifo_rejected",
+      "disposition": "adapt",
+      "component": "evidence_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_resolver_hash_links_fifo_and_no_implicit_reads"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/per_call_evidence_context/test_per_call_evidence_context.py",
+      "test": "test_selection_requires_explicit_contract_and_success",
+      "disposition": "adapt",
+      "component": "evidence_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_resolver_hash_links_fifo_and_no_implicit_reads"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/per_call_evidence_context/test_per_call_evidence_context.py",
+      "test": "test_failed_attempt_can_be_indexed_and_repaired",
+      "disposition": "adapt",
+      "component": "evidence_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_resolver_hash_links_fifo_and_no_implicit_reads"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/per_call_evidence_context/test_per_call_evidence_context.py",
+      "test": "test_request_without_result_supported",
+      "disposition": "adapt",
+      "component": "evidence_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_resolver_hash_links_fifo_and_no_implicit_reads"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/per_call_evidence_context/test_per_call_evidence_context.py",
+      "test": "test_image_hash_is_computed",
+      "disposition": "adapt",
+      "component": "evidence_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_resolver_hash_links_fifo_and_no_implicit_reads"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/per_call_evidence_context/test_per_call_evidence_context.py",
+      "test": "test_actions_equal_different_and_bool_are_distinguished",
+      "disposition": "adapt",
+      "component": "evidence_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_resolver_hash_links_fifo_and_no_implicit_reads"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/per_call_evidence_context/test_per_call_evidence_context.py",
+      "test": "test_response_identity_and_stage",
+      "disposition": "adapt",
+      "component": "evidence_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_resolver_hash_links_fifo_and_no_implicit_reads"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/per_call_evidence_context/test_per_call_evidence_context.py",
+      "test": "test_backend_acceptance_is_never_inferred",
+      "disposition": "adapt",
+      "component": "evidence_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_resolver_hash_links_fifo_and_no_implicit_reads"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/per_call_evidence_context/test_per_call_evidence_context.py",
+      "test": "test_no_user_injected_computed_checks_or_unrelated_fields",
+      "disposition": "adapt",
+      "component": "evidence_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_resolver_hash_links_fifo_and_no_implicit_reads"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/per_call_evidence_context/test_per_call_evidence_context.py",
+      "test": "test_prompt_role_and_duplicate_attempts",
+      "disposition": "adapt",
+      "component": "evidence_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_resolver_hash_links_fifo_and_no_implicit_reads"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/per_call_evidence_context/test_per_call_evidence_context.py",
+      "test": "test_strict_json",
+      "disposition": "retain_behavior",
+      "component": "evidence_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_strict_json_precision_and_identity"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/per_call_evidence_context/test_per_call_evidence_context.py",
+      "test": "test_cli_relative_root_and_output_protection",
+      "disposition": "adapt",
+      "component": "evidence_context",
+      "reason": "Independent CLI rejects existing outputs and uses explicit resource maps; old task-relative absolute paths are retired.",
+      "related_new_tests": [
+        "test_integration.IntegrationTest.test_cli_stdin_files_relocation_and_preservation"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/recent_execution_feedback_context/test_recent_execution_feedback_context.py",
+      "test": "test_initial_and_compact",
+      "disposition": "adapt",
+      "component": "execution_feedback",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_execution_never_substitutes_accepted_count"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/recent_execution_feedback_context/test_recent_execution_feedback_context.py",
+      "test": "test_prefix_and_computation",
+      "disposition": "adapt",
+      "component": "execution_feedback",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_execution_never_substitutes_accepted_count"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/recent_execution_feedback_context/test_recent_execution_feedback_context.py",
+      "test": "test_nonadjacent_actions_remain_separate",
+      "disposition": "adapt",
+      "component": "execution_feedback",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_execution_never_substitutes_accepted_count"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/recent_execution_feedback_context/test_recent_execution_feedback_context.py",
+      "test": "test_cancelling_commands",
+      "disposition": "adapt",
+      "component": "execution_feedback",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_execution_never_substitutes_accepted_count"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/recent_execution_feedback_context/test_recent_execution_feedback_context.py",
+      "test": "test_window_and_roundtrip",
+      "disposition": "adapt",
+      "component": "execution_feedback",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_execution_never_substitutes_accepted_count"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/recent_execution_feedback_context/test_recent_execution_feedback_context.py",
+      "test": "test_episode_reset_discards_old_history",
+      "disposition": "adapt",
+      "component": "execution_feedback",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_execution_never_substitutes_accepted_count"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/recent_execution_feedback_context/test_recent_execution_feedback_context.py",
+      "test": "test_invalid_intervals",
+      "disposition": "adapt",
+      "component": "execution_feedback",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_execution_never_substitutes_accepted_count"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/recent_execution_feedback_context/test_recent_execution_feedback_context.py",
+      "test": "test_response_binding",
+      "disposition": "adapt",
+      "component": "execution_feedback",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_execution_never_substitutes_accepted_count"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/recent_execution_feedback_context/test_recent_execution_feedback_context.py",
+      "test": "test_invalid_state_action_and_numbers",
+      "disposition": "adapt",
+      "component": "execution_feedback",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_execution_never_substitutes_accepted_count"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/recent_execution_feedback_context/test_recent_execution_feedback_context.py",
+      "test": "test_missing_history_and_initial_input",
+      "disposition": "adapt",
+      "component": "execution_feedback",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_execution_never_substitutes_accepted_count"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/recent_execution_feedback_context/test_recent_execution_feedback_context.py",
+      "test": "test_history_identity_and_computation",
+      "disposition": "adapt",
+      "component": "execution_feedback",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_execution_never_substitutes_accepted_count"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/recent_execution_feedback_context/test_recent_execution_feedback_context.py",
+      "test": "test_strict_json_and_scope",
+      "disposition": "retain_behavior",
+      "component": "execution_feedback",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_strict_json_precision_and_identity"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/recent_execution_feedback_context/test_recent_execution_feedback_context.py",
+      "test": "test_cli_outputs_stdin_and_overwrite_protection",
+      "disposition": "adapt",
+      "component": "execution_feedback",
+      "reason": "Independent CLI rejects existing outputs and uses explicit resource maps; old task-relative absolute paths are retired.",
+      "related_new_tests": [
+        "test_integration.IntegrationTest.test_cli_stdin_files_relocation_and_preservation"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/code_calculation_context/test_code_calculation_context.py",
+      "test": "test_inventory_hashes_scope_and_no_mutation",
+      "disposition": "adapt",
+      "component": "tool_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_tools_explicit_injection_and_late_result",
+        "test_components.ComponentsTest.test_composition_scope_cycle_and_independent_failure"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/code_calculation_context/test_code_calculation_context.py",
+      "test": "test_binding_precision_and_boolean_distinction",
+      "disposition": "retain_behavior",
+      "component": "tool_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_strict_json_precision_and_identity"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/code_calculation_context/test_code_calculation_context.py",
+      "test": "test_strict_json",
+      "disposition": "retain_behavior",
+      "component": "tool_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_strict_json_precision_and_identity"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/code_calculation_context/test_code_calculation_context.py",
+      "test": "test_pointer_escapes_and_root",
+      "disposition": "adapt",
+      "component": "tool_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_tools_explicit_injection_and_late_result",
+        "test_components.ComponentsTest.test_composition_scope_cycle_and_independent_failure"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/code_calculation_context/test_code_calculation_context.py",
+      "test": "test_file_path_rejections",
+      "disposition": "adapt",
+      "component": "tool_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_resolver_hash_links_fifo_and_no_implicit_reads"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/code_calculation_context/test_code_calculation_context.py",
+      "test": "test_symlink_fifo_and_alias_rejections",
+      "disposition": "adapt",
+      "component": "tool_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_resolver_hash_links_fifo_and_no_implicit_reads"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/code_calculation_context/test_code_calculation_context.py",
+      "test": "test_missing_and_unassigned_files",
+      "disposition": "adapt",
+      "component": "tool_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_tools_explicit_injection_and_late_result",
+        "test_components.ComponentsTest.test_composition_scope_cycle_and_independent_failure"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/code_calculation_context/test_code_calculation_context.py",
+      "test": "test_external_schema_reference",
+      "disposition": "adapt",
+      "component": "tool_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_tools_explicit_injection_and_late_result",
+        "test_components.ComponentsTest.test_composition_scope_cycle_and_independent_failure"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/code_calculation_context/test_code_calculation_context.py",
+      "test": "test_evidence_document_root",
+      "disposition": "adapt",
+      "component": "tool_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_tools_explicit_injection_and_late_result",
+        "test_components.ComponentsTest.test_composition_scope_cycle_and_independent_failure"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/code_calculation_context/test_code_calculation_context.py",
+      "test": "test_required_known_dependency_edges",
+      "disposition": "retire",
+      "component": "tool_context",
+      "reason": "Hard-coded component dependency inventory is replaced by an explicit DAG.",
+      "related_new_tests": [],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/code_calculation_context/test_code_calculation_context.py",
+      "test": "test_nine_component_example",
+      "disposition": "retire",
+      "component": "tool_context",
+      "reason": "Fixed nine-component graph is replaced by explicit per-request composition.",
+      "related_new_tests": [],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/code_calculation_context/test_code_calculation_context.py",
+      "test": "test_vision_capability",
+      "disposition": "adapt",
+      "component": "tool_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_tools_explicit_injection_and_late_result",
+        "test_components.ComponentsTest.test_composition_scope_cycle_and_independent_failure"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/code_calculation_context/test_code_calculation_context.py",
+      "test": "test_tool_contract_and_scratch",
+      "disposition": "adapt",
+      "component": "tool_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_tools_explicit_injection_and_late_result",
+        "test_components.ComponentsTest.test_composition_scope_cycle_and_independent_failure"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/code_calculation_context/test_code_calculation_context.py",
+      "test": "test_change_during_assembly",
+      "disposition": "adapt",
+      "component": "tool_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_tools_explicit_injection_and_late_result",
+        "test_components.ComponentsTest.test_composition_scope_cycle_and_independent_failure"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/code_calculation_context/test_code_calculation_context.py",
+      "test": "test_limits_and_unicode_fences",
+      "disposition": "adapt",
+      "component": "tool_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_tools_explicit_injection_and_late_result",
+        "test_components.ComponentsTest.test_composition_scope_cycle_and_independent_failure"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/code_calculation_context/test_code_calculation_context.py",
+      "test": "test_cli_outputs_stdin_and_protection",
+      "disposition": "adapt",
+      "component": "tool_context",
+      "reason": "Independent CLI rejects existing outputs and uses explicit resource maps; old task-relative absolute paths are retired.",
+      "related_new_tests": [
+        "test_integration.IntegrationTest.test_cli_stdin_files_relocation_and_preservation"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/code_calculation_context/test_code_calculation_context.py",
+      "test": "test_output_symlinks_hardlinks_and_duplicates",
+      "disposition": "adapt",
+      "component": "tool_context",
+      "reason": "Independent CLI rejects existing outputs and uses explicit resource maps; old task-relative absolute paths are retired.",
+      "related_new_tests": [
+        "test_integration.IntegrationTest.test_cli_stdin_files_relocation_and_preservation"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/final_output_validation_context/test_final_output_validation_context.py",
+      "test": "test_repair_eligible_and_evidence_preserved",
+      "disposition": "retire",
+      "component": "output_contract",
+      "reason": "Fixed code-repair/retry workflow was explicitly removed; the component preserves the candidate and reports checks.",
+      "related_new_tests": [],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/final_output_validation_context/test_final_output_validation_context.py",
+      "test": "test_repair_execution_and_parse_failures",
+      "disposition": "retire",
+      "component": "output_contract",
+      "reason": "Fixed code-repair/retry workflow was explicitly removed; the component preserves the candidate and reports checks.",
+      "related_new_tests": [],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/final_output_validation_context/test_final_output_validation_context.py",
+      "test": "test_repair_second_failure_is_terminal",
+      "disposition": "retire",
+      "component": "output_contract",
+      "reason": "Fixed code-repair/retry workflow was explicitly removed; the component preserves the candidate and reports checks.",
+      "related_new_tests": [],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/final_output_validation_context/test_final_output_validation_context.py",
+      "test": "test_repair_context_and_execution_gates",
+      "disposition": "retire",
+      "component": "output_contract",
+      "reason": "Fixed code-repair/retry workflow was explicitly removed; the component preserves the candidate and reports checks.",
+      "related_new_tests": [],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/final_output_validation_context/test_final_output_validation_context.py",
+      "test": "test_runtime_failure_does_not_require_nonexistent_code_result",
+      "disposition": "adapt",
+      "component": "output_contract",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_output_candidate_preserved_and_unknown_rule",
+        "test_integration.IntegrationTest.test_plain_text_and_exact_resource_contracts"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/final_output_validation_context/test_final_output_validation_context.py",
+      "test": "test_repair_strict_fields_and_required_evidence",
+      "disposition": "retire",
+      "component": "output_contract",
+      "reason": "Fixed code-repair/retry workflow was explicitly removed; the component preserves the candidate and reports checks.",
+      "related_new_tests": [],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/final_output_validation_context/test_final_output_validation_context.py",
+      "test": "test_repair_rejects_inconsistent_failure_and_result",
+      "disposition": "retire",
+      "component": "output_contract",
+      "reason": "Fixed code-repair/retry workflow was explicitly removed; the component preserves the candidate and reports checks.",
+      "related_new_tests": [],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/final_output_validation_context/test_final_output_validation_context.py",
+      "test": "test_repair_does_not_relax_preservation",
+      "disposition": "retire",
+      "component": "output_contract",
+      "reason": "Fixed code-repair/retry workflow was explicitly removed; the component preserves the candidate and reports checks.",
+      "related_new_tests": [],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/final_output_validation_context/test_final_output_validation_context.py",
+      "test": "test_existing_examples_unchanged_without_repair",
+      "disposition": "adapt",
+      "component": "output_contract",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_output_candidate_preserved_and_unknown_rule",
+        "test_integration.IntegrationTest.test_plain_text_and_exact_resource_contracts"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/final_output_validation_context/test_final_output_validation_context.py",
+      "test": "test_repair_cli_example_and_terminal_handoff",
+      "disposition": "retire",
+      "component": "output_contract",
+      "reason": "Fixed code-repair/retry workflow was explicitly removed; the component preserves the candidate and reports checks.",
+      "related_new_tests": [],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/final_output_validation_context/test_final_output_validation_context.py",
+      "test": "test_real_schema_and_no_invented_action_count",
+      "disposition": "adapt",
+      "component": "output_contract",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_output_candidate_preserved_and_unknown_rule",
+        "test_integration.IntegrationTest.test_plain_text_and_exact_resource_contracts"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/final_output_validation_context/test_final_output_validation_context.py",
+      "test": "test_json_root_need_not_be_object",
+      "disposition": "adapt",
+      "component": "output_contract",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_output_candidate_preserved_and_unknown_rule",
+        "test_integration.IntegrationTest.test_plain_text_and_exact_resource_contracts"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/final_output_validation_context/test_final_output_validation_context.py",
+      "test": "test_decimal_precision_and_integer_semantics",
+      "disposition": "retain_behavior",
+      "component": "output_contract",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_strict_json_precision_and_identity"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/final_output_validation_context/test_final_output_validation_context.py",
+      "test": "test_strict_json",
+      "disposition": "retain_behavior",
+      "component": "output_contract",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_strict_json_precision_and_identity"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/final_output_validation_context/test_final_output_validation_context.py",
+      "test": "test_input_not_mutated_and_compact_render",
+      "disposition": "adapt",
+      "component": "output_contract",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_output_candidate_preserved_and_unknown_rule",
+        "test_integration.IntegrationTest.test_plain_text_and_exact_resource_contracts"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/final_output_validation_context/test_final_output_validation_context.py",
+      "test": "test_fence_inside_constraint",
+      "disposition": "adapt",
+      "component": "output_contract",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_output_candidate_preserved_and_unknown_rule",
+        "test_integration.IntegrationTest.test_plain_text_and_exact_resource_contracts"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/final_output_validation_context/test_final_output_validation_context.py",
+      "test": "test_dialect_and_schema_rejections",
+      "disposition": "adapt",
+      "component": "output_contract",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_output_candidate_preserved_and_unknown_rule",
+        "test_integration.IntegrationTest.test_plain_text_and_exact_resource_contracts"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/final_output_validation_context/test_final_output_validation_context.py",
+      "test": "test_local_refs_and_external_ref_rejection",
+      "disposition": "adapt",
+      "component": "output_contract",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_output_candidate_preserved_and_unknown_rule",
+        "test_integration.IntegrationTest.test_plain_text_and_exact_resource_contracts"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/final_output_validation_context/test_final_output_validation_context.py",
+      "test": "test_pointer_escaping_and_partial_preservation",
+      "disposition": "adapt",
+      "component": "output_contract",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_output_candidate_preserved_and_unknown_rule",
+        "test_integration.IntegrationTest.test_plain_text_and_exact_resource_contracts"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/final_output_validation_context/test_final_output_validation_context.py",
+      "test": "test_checks_and_contradictions",
+      "disposition": "adapt",
+      "component": "output_contract",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_output_candidate_preserved_and_unknown_rule",
+        "test_integration.IntegrationTest.test_plain_text_and_exact_resource_contracts"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/final_output_validation_context/test_final_output_validation_context.py",
+      "test": "test_fullmatch_check_missing_path_and_preserved_shape",
+      "disposition": "adapt",
+      "component": "output_contract",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_output_candidate_preserved_and_unknown_rule",
+        "test_integration.IntegrationTest.test_plain_text_and_exact_resource_contracts"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/final_output_validation_context/test_final_output_validation_context.py",
+      "test": "test_plain_text_regex_and_exact_newlines",
+      "disposition": "adapt",
+      "component": "output_contract",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_output_candidate_preserved_and_unknown_rule",
+        "test_integration.IntegrationTest.test_plain_text_and_exact_resource_contracts"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/final_output_validation_context/test_final_output_validation_context.py",
+      "test": "test_text_file_schema_and_csv_output",
+      "disposition": "adapt",
+      "component": "output_contract",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_output_candidate_preserved_and_unknown_rule",
+        "test_integration.IntegrationTest.test_plain_text_and_exact_resource_contracts"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/final_output_validation_context/test_final_output_validation_context.py",
+      "test": "test_unknown_fields_and_incompatible_formats",
+      "disposition": "adapt",
+      "component": "output_contract",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_output_candidate_preserved_and_unknown_rule",
+        "test_integration.IntegrationTest.test_plain_text_and_exact_resource_contracts"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/final_output_validation_context/test_final_output_validation_context.py",
+      "test": "test_failure_handling_no_invented_tools",
+      "disposition": "adapt",
+      "component": "output_contract",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_output_candidate_preserved_and_unknown_rule",
+        "test_integration.IntegrationTest.test_plain_text_and_exact_resource_contracts"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/final_output_validation_context/test_final_output_validation_context.py",
+      "test": "test_cli_stdin_and_two_outputs",
+      "disposition": "adapt",
+      "component": "output_contract",
+      "reason": "Independent CLI rejects existing outputs and uses explicit resource maps; old task-relative absolute paths are retired.",
+      "related_new_tests": [
+        "test_integration.IntegrationTest.test_cli_stdin_files_relocation_and_preservation"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/final_output_validation_context/test_final_output_validation_context.py",
+      "test": "test_cli_input_alias_and_output_alias_protection",
+      "disposition": "adapt",
+      "component": "output_contract",
+      "reason": "Independent CLI rejects existing outputs and uses explicit resource maps; old task-relative absolute paths are retired.",
+      "related_new_tests": [
+        "test_integration.IntegrationTest.test_cli_stdin_files_relocation_and_preservation"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/final_output_validation_context/test_final_output_validation_context.py",
+      "test": "test_cli_external_schema_cannot_be_overwritten",
+      "disposition": "adapt",
+      "component": "output_contract",
+      "reason": "Independent CLI rejects existing outputs and uses explicit resource maps; old task-relative absolute paths are retired.",
+      "related_new_tests": [
+        "test_integration.IntegrationTest.test_cli_stdin_files_relocation_and_preservation"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/final_output_validation_context/test_final_output_validation_context.py",
+      "test": "test_cli_fifo_and_symlink_outputs",
+      "disposition": "adapt",
+      "component": "output_contract",
+      "reason": "Independent CLI rejects existing outputs and uses explicit resource maps; old task-relative absolute paths are retired.",
+      "related_new_tests": [
+        "test_integration.IntegrationTest.test_cli_stdin_files_relocation_and_preservation"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/execution_budget_context/test_execution_budget_context.py",
+      "test": "test_step_budget_and_complete_output",
+      "disposition": "adapt",
+      "component": "resource_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_resource_clock_and_units"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/execution_budget_context/test_execution_budget_context.py",
+      "test": "test_new_evidence_changes_reserve",
+      "disposition": "adapt",
+      "component": "resource_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_resource_clock_and_units"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/execution_budget_context/test_execution_budget_context.py",
+      "test": "test_clock_progress_without_new_execution",
+      "disposition": "adapt",
+      "component": "resource_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_resource_clock_and_units"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/execution_budget_context/test_execution_budget_context.py",
+      "test": "test_expired_deadline",
+      "disposition": "adapt",
+      "component": "resource_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_resource_clock_and_units"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/execution_budget_context/test_execution_budget_context.py",
+      "test": "test_insufficient_history_and_explicit_fallback",
+      "disposition": "adapt",
+      "component": "resource_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_resource_clock_and_units"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/execution_budget_context/test_execution_budget_context.py",
+      "test": "test_filter_stale_conditions_workload_and_incomplete",
+      "disposition": "adapt",
+      "component": "resource_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_resource_clock_and_units"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/execution_budget_context/test_execution_budget_context.py",
+      "test": "test_partial_unknown_prefix_not_presented_as_supported",
+      "disposition": "adapt",
+      "component": "resource_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_resource_clock_and_units"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/execution_budget_context/test_execution_budget_context.py",
+      "test": "test_upper_cost_bounds_do_not_prove_last_window",
+      "disposition": "adapt",
+      "component": "resource_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_resource_clock_and_units"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/execution_budget_context/test_execution_budget_context.py",
+      "test": "test_multiple_dimensions_remain_independent",
+      "disposition": "adapt",
+      "component": "resource_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_resource_clock_and_units"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/execution_budget_context/test_execution_budget_context.py",
+      "test": "test_known_shortfall_survives",
+      "disposition": "adapt",
+      "component": "resource_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_resource_clock_and_units"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/execution_budget_context/test_execution_budget_context.py",
+      "test": "test_interruptible_and_early_windows",
+      "disposition": "adapt",
+      "component": "resource_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_resource_clock_and_units"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/execution_budget_context/test_execution_budget_context.py",
+      "test": "test_validation",
+      "disposition": "adapt",
+      "component": "resource_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_resource_clock_and_units"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/execution_budget_context/test_execution_budget_context.py",
+      "test": "test_strict_json_and_compact_output",
+      "disposition": "retain_behavior",
+      "component": "resource_context",
+      "reason": "Preserve applicable evidence/unknown/precision guarantee under the new component contract; old scenario-specific signature is not retained.",
+      "related_new_tests": [
+        "test_components.ComponentsTest.test_strict_json_precision_and_identity"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    },
+    {
+      "original_file": "scripts/execution_budget_context/test_execution_budget_context.py",
+      "test": "test_cli_stdin_files_and_path_protection",
+      "disposition": "adapt",
+      "component": "resource_context",
+      "reason": "Independent CLI rejects existing outputs and uses explicit resource maps; old task-relative absolute paths are retired.",
+      "related_new_tests": [
+        "test_integration.IntegrationTest.test_cli_stdin_files_relocation_and_preservation"
+      ],
+      "evidence": "Behavioral migration mapping, not a claim that the old test runs unchanged or that every old assertion has an identical new assertion"
+    }
+  ]
+}

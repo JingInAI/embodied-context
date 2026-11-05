@@ -1,0 +1,609 @@
+{
+  "purpose": "Authored design examples for third-round review; no v1 component, model or simulator executed. Some examples deliberately pass schema but fail semantic requirements.",
+  "cases": [
+    {
+      "id": "G01",
+      "kind": "qualified_references",
+      "contexts": [
+        {
+          "schema_version": "context.v1",
+          "component": "observation_context",
+          "payload_version": "1",
+          "context_id": "design:ctx:left",
+          "scope": {
+            "epoch_id": "shared-world",
+            "run_id": "synthetic-design",
+            "task_id": "composition",
+            "turn_index": 0
+          },
+          "status": "partial",
+          "content": {
+            "unknowns": [
+              "图像语义未在此样例提取"
+            ]
+          },
+          "references": [
+            {
+              "id": "frame-0",
+              "media_type": "image/png",
+              "uri": "synthetic://left/frame.png",
+              "source_kind": "synthetic"
+            }
+          ],
+          "issues": [
+            {
+              "code": "missing_modality_processor",
+              "path": "/input/observations",
+              "message": "Only resource registration is available; requested semantic extraction has no processor."
+            }
+          ]
+        },
+        {
+          "schema_version": "context.v1",
+          "component": "observation_context",
+          "payload_version": "1",
+          "context_id": "design:ctx:right",
+          "scope": {
+            "epoch_id": "shared-world",
+            "run_id": "synthetic-design",
+            "task_id": "composition",
+            "turn_index": 0
+          },
+          "status": "partial",
+          "content": {
+            "unknowns": [
+              "图像语义未在此样例提取"
+            ]
+          },
+          "references": [
+            {
+              "id": "frame-0",
+              "media_type": "image/png",
+              "uri": "synthetic://right/frame.png",
+              "source_kind": "synthetic"
+            }
+          ],
+          "issues": [
+            {
+              "code": "missing_modality_processor",
+              "path": "/input/observations",
+              "message": "Only resource registration is available; requested semantic extraction has no processor."
+            }
+          ]
+        }
+      ],
+      "delivery": {
+        "schema_version": "context.delivery.v1",
+        "delivery_id": "design:delivery:qualified",
+        "receiver_id": "agent-a",
+        "session_id": "s1",
+        "mode": "full",
+        "context_ids": [
+          "design:ctx:left",
+          "design:ctx:right"
+        ],
+        "blocks": [
+          {
+            "id": "view-0",
+            "kind": "media",
+            "critical": false,
+            "reference_ids": [
+              "media-0"
+            ]
+          },
+          {
+            "id": "view-1",
+            "kind": "media",
+            "critical": false,
+            "reference_ids": [
+              "media-1"
+            ]
+          }
+        ],
+        "resources": [
+          {
+            "id": "media-0",
+            "source": {
+              "context_id": "design:ctx:left",
+              "reference_id": "frame-0"
+            },
+            "reference": {
+              "id": "frame-0",
+              "media_type": "image/png",
+              "uri": "synthetic://left/frame.png",
+              "source_kind": "synthetic"
+            }
+          },
+          {
+            "id": "media-1",
+            "source": {
+              "context_id": "design:ctx:right",
+              "reference_id": "frame-0"
+            },
+            "reference": {
+              "id": "frame-0",
+              "media_type": "image/png",
+              "uri": "synthetic://right/frame.png",
+              "source_kind": "synthetic"
+            }
+          }
+        ],
+        "scope": {
+          "epoch_id": "shared-world",
+          "run_id": "synthetic-design",
+          "task_id": "composition",
+          "turn_index": 0
+        }
+      },
+      "expected_resource_count": 2,
+      "assertions": [
+        "Local reference frame-0 belongs to two separate contexts",
+        "Source references preserved without flattening collisions"
+      ]
+    },
+    {
+      "id": "G02",
+      "kind": "dangling_delivery_reference",
+      "delivery": {
+        "schema_version": "context.delivery.v1",
+        "delivery_id": "design:delivery:qualified",
+        "receiver_id": "agent-a",
+        "session_id": "s1",
+        "mode": "full",
+        "context_ids": [
+          "design:ctx:left",
+          "design:ctx:right"
+        ],
+        "blocks": [
+          {
+            "id": "view-0",
+            "kind": "media",
+            "critical": false,
+            "reference_ids": [
+              "media-0"
+            ]
+          },
+          {
+            "id": "view-1",
+            "kind": "media",
+            "critical": false,
+            "reference_ids": [
+              "media-1"
+            ]
+          }
+        ],
+        "resources": [
+          {
+            "id": "media-0",
+            "source": {
+              "context_id": "design:ctx:left",
+              "reference_id": "frame-0"
+            },
+            "reference": {
+              "id": "frame-0",
+              "media_type": "image/png",
+              "uri": "synthetic://left/frame.png",
+              "source_kind": "synthetic"
+            }
+          }
+        ],
+        "scope": {
+          "epoch_id": "shared-world",
+          "run_id": "synthetic-design",
+          "task_id": "composition",
+          "turn_index": 0
+        }
+      },
+      "expected_error": "dangling_reference",
+      "note": "Common schema is valid; resource closure is a semantic check"
+    },
+    {
+      "id": "G03",
+      "kind": "retraction_dependency",
+      "dependencies": {
+        "pixel:1": [],
+        "point:1": [
+          "pixel:1"
+        ],
+        "goal:1": [
+          "point:1"
+        ],
+        "unrelated:1": []
+      },
+      "retracted": [
+        "pixel:1"
+      ],
+      "expected_invalidated": [
+        "pixel:1",
+        "point:1",
+        "goal:1"
+      ],
+      "expected_retained": [
+        "unrelated:1"
+      ]
+    },
+    {
+      "id": "G04",
+      "kind": "clock_discontinuity",
+      "before": {
+        "clock_id": "sim",
+        "clock_epoch": "segment-a",
+        "unit": "s",
+        "value": 12
+      },
+      "after": {
+        "clock_id": "sim",
+        "clock_epoch": "segment-b",
+        "unit": "s",
+        "value": 2
+      },
+      "expected_elapsed": null,
+      "expected_issue": "incomparable_clock_epoch"
+    },
+    {
+      "id": "G05",
+      "kind": "video_offset",
+      "episode_id": "ep-2",
+      "container_start_s": 120,
+      "query_episode_s": 0.5,
+      "actual_pts_s": 120.52,
+      "tolerance_s": 0.03,
+      "expected_query_container_s": 120.5,
+      "expected_within_tolerance": true
+    },
+    {
+      "id": "G06",
+      "kind": "padded_sample",
+      "samples": [
+        {
+          "frame_id": "f0",
+          "quality": "padded"
+        },
+        {
+          "frame_id": "f0",
+          "quality": "measured"
+        },
+        {
+          "frame_id": "f0",
+          "quality": "padded"
+        }
+      ],
+      "expected_distinct_measured_samples": 1,
+      "assertions": [
+        "No new event count from repeated padding",
+        "This sample count is not a physical-event count"
+      ]
+    },
+    {
+      "id": "G07",
+      "kind": "perspective_mismatch",
+      "request_scope": {
+        "epoch_id": "shared-world",
+        "run_id": "synthetic-design",
+        "task_id": "composition",
+        "turn_index": 0,
+        "perspective_id": "agent-a"
+      },
+      "history_scope": {
+        "epoch_id": "shared-world",
+        "run_id": "synthetic-design",
+        "task_id": "composition",
+        "turn_index": 0,
+        "perspective_id": "agent-b"
+      },
+      "expected_error": "identity_mismatch"
+    },
+    {
+      "id": "G08",
+      "kind": "query_partial",
+      "output": {
+        "component": "spatial_context",
+        "content": {
+          "results": [
+            {
+              "epistemic": "derived",
+              "evidence_refs": [
+                "calibration"
+              ],
+              "method": {
+                "id": "pinhole_positive_z",
+                "version": "1",
+                "formula": "u=fx*x/z+cx; v=fy*y/z+cy"
+              },
+              "query_id": "q1",
+              "status": "ready",
+              "value": {
+                "pixel": [
+                  352,
+                  304
+                ],
+                "unit": "px",
+                "validity": "in_image",
+                "occlusion": "unknown",
+                "kind": "pixel",
+                "camera_id": "front"
+              }
+            },
+            {
+              "query_id": "q2",
+              "status": "unavailable",
+              "issues": [
+                {
+                  "code": "missing_calibration",
+                  "path": "/input/queries/1",
+                  "message": "Camera missing."
+                }
+              ]
+            }
+          ]
+        },
+        "context_id": "design:ctx:query-partial",
+        "references": [
+          {
+            "id": "calibration",
+            "inline": {
+              "cx": 320,
+              "cy": 240,
+              "fx": 320,
+              "fy": 320
+            },
+            "media_type": "application/json",
+            "source_kind": "synthetic"
+          }
+        ],
+        "schema_version": "context.v1",
+        "scope": {
+          "epoch_id": "projection-epoch",
+          "run_id": "synthetic-design",
+          "task_id": "projection",
+          "turn_index": 0
+        },
+        "status": "partial",
+        "payload_version": "1",
+        "issues": [
+          {
+            "code": "missing_calibration",
+            "path": "/input/queries/1",
+            "message": "Camera missing for q2."
+          }
+        ]
+      },
+      "expected_status": "partial"
+    },
+    {
+      "id": "G09",
+      "kind": "schema_annotations",
+      "candidate": {
+        "contact": "not-an-email"
+      },
+      "contract": {
+        "type": "object",
+        "properties": {
+          "contact": {
+            "type": "string",
+            "format": "email"
+          },
+          "count": {
+            "type": "integer",
+            "default": 3
+          }
+        }
+      },
+      "validation_profile": {
+        "format_assertion": false,
+        "apply_defaults": false
+      },
+      "expected_unchanged_candidate": {
+        "contact": "not-an-email"
+      },
+      "expected_format_check": "not_evaluated"
+    },
+    {
+      "id": "G10",
+      "kind": "composition_structure",
+      "input": {
+        "schema_version": "context.compose.v1",
+        "scope": {
+          "epoch_id": "shared-world",
+          "run_id": "synthetic-design",
+          "task_id": "composition",
+          "turn_index": 0
+        },
+        "nodes": [
+          {
+            "id": "left",
+            "component": "observation_context",
+            "request": {
+              "schema_version": "context.v1",
+              "scope": {
+                "epoch_id": "shared-world",
+                "run_id": "synthetic-design",
+                "task_id": "composition",
+                "turn_index": 0
+              },
+              "input": {
+                "observations": [
+                  {
+                    "id": "view-left",
+                    "modality": "image",
+                    "reference_id": "frame-0"
+                  }
+                ]
+              },
+              "references": [
+                {
+                  "id": "frame-0",
+                  "media_type": "image/png",
+                  "uri": "synthetic://left/frame.png",
+                  "source_kind": "synthetic"
+                }
+              ]
+            }
+          },
+          {
+            "id": "right",
+            "component": "observation_context",
+            "request": {
+              "schema_version": "context.v1",
+              "scope": {
+                "epoch_id": "shared-world",
+                "run_id": "synthetic-design",
+                "task_id": "composition",
+                "turn_index": 0
+              },
+              "input": {
+                "observations": [
+                  {
+                    "id": "view-right",
+                    "modality": "image",
+                    "reference_id": "frame-0"
+                  }
+                ]
+              },
+              "references": [
+                {
+                  "id": "frame-0",
+                  "media_type": "image/png",
+                  "uri": "synthetic://right/frame.png",
+                  "source_kind": "synthetic"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "expected_output": {
+        "schema_version": "context.composed.v1",
+        "scope": {
+          "epoch_id": "shared-world",
+          "run_id": "synthetic-design",
+          "task_id": "composition",
+          "turn_index": 0
+        },
+        "nodes": [
+          {
+            "id": "left",
+            "result": {
+              "schema_version": "context.v1",
+              "component": "observation_context",
+              "payload_version": "1",
+              "context_id": "design:ctx:left",
+              "scope": {
+                "epoch_id": "shared-world",
+                "run_id": "synthetic-design",
+                "task_id": "composition",
+                "turn_index": 0
+              },
+              "status": "partial",
+              "content": {
+                "unknowns": [
+                  "图像语义未在此样例提取"
+                ]
+              },
+              "references": [
+                {
+                  "id": "frame-0",
+                  "media_type": "image/png",
+                  "uri": "synthetic://left/frame.png",
+                  "source_kind": "synthetic"
+                }
+              ],
+              "issues": [
+                {
+                  "code": "missing_modality_processor",
+                  "path": "/input/observations",
+                  "message": "Only resource registration is available; requested semantic extraction has no processor."
+                }
+              ]
+            }
+          },
+          {
+            "id": "right",
+            "result": {
+              "schema_version": "context.v1",
+              "component": "observation_context",
+              "payload_version": "1",
+              "context_id": "design:ctx:right",
+              "scope": {
+                "epoch_id": "shared-world",
+                "run_id": "synthetic-design",
+                "task_id": "composition",
+                "turn_index": 0
+              },
+              "status": "partial",
+              "content": {
+                "unknowns": [
+                  "图像语义未在此样例提取"
+                ]
+              },
+              "references": [
+                {
+                  "id": "frame-0",
+                  "media_type": "image/png",
+                  "uri": "synthetic://right/frame.png",
+                  "source_kind": "synthetic"
+                }
+              ],
+              "issues": [
+                {
+                  "code": "missing_modality_processor",
+                  "path": "/input/observations",
+                  "message": "Only resource registration is available; requested semantic extraction has no processor."
+                }
+              ]
+            }
+          }
+        ],
+        "status": "partial"
+      },
+      "assertions": [
+        "Partial media registration is not visual extraction",
+        "Multiple stateless nodes of one component allowed"
+      ]
+    },
+    {
+      "id": "G11",
+      "kind": "competing_state_proposals",
+      "proposals": [
+        {
+          "owner": "observation_context",
+          "scope": {
+            "epoch_id": "shared-world",
+            "run_id": "synthetic-design",
+            "task_id": "composition",
+            "turn_index": 0
+          },
+          "base_state_id": "state-0",
+          "new_state_id": "state-a"
+        },
+        {
+          "owner": "observation_context",
+          "scope": {
+            "epoch_id": "shared-world",
+            "run_id": "synthetic-design",
+            "task_id": "composition",
+            "turn_index": 0
+          },
+          "base_state_id": "state-0",
+          "new_state_id": "state-b"
+        }
+      ],
+      "expected_error": "competing_state_updates"
+    },
+    {
+      "id": "G12",
+      "kind": "cached_tool_input_changed",
+      "cached_binding": {
+        "tool_revision": "tool-v1",
+        "input_version": "frame-v1",
+        "perspective_id": "agent-a"
+      },
+      "current_binding": {
+        "tool_revision": "tool-v1",
+        "input_version": "frame-v2",
+        "perspective_id": "agent-a"
+      },
+      "expected_reusable": false
+    }
+  ]
+}

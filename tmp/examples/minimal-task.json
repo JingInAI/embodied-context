@@ -1,0 +1,26 @@
+{
+  "input": {
+    "task": {
+      "kind": "reasoning",
+      "text": "根据已提供的视频说明红色物体最后出现的位置。"
+    }
+  },
+  "request": {
+    "audience": {
+      "modalities": [
+        "text"
+      ]
+    },
+    "focus": [
+      "last_observed_location"
+    ],
+    "language": "zh"
+  },
+  "schema_version": "context.v1",
+  "scope": {
+    "epoch_id": "reasoning-only-epoch",
+    "run_id": "synthetic-design",
+    "task_id": "reasoning-only",
+    "turn_index": 0
+  }
+}

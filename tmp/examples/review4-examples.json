@@ -1,0 +1,142 @@
+{
+  "purpose": "Fourth-round authored semantic fixtures. These check specification consistency, not implemented adapters/components.",
+  "cases": [
+    {
+      "id": "H01",
+      "kind": "strict_identity",
+      "left": {
+        "accepted": true
+      },
+      "right": {
+        "accepted": 1
+      },
+      "expected_equal": false
+    },
+    {
+      "id": "H02",
+      "kind": "origin_run_identity",
+      "facts": [
+        {
+          "source_namespace": "sensor",
+          "origin_scope": {
+            "run_id": "r1",
+            "epoch_id": "e1"
+          },
+          "id": "press1"
+        },
+        {
+          "source_namespace": "sensor",
+          "origin_scope": {
+            "run_id": "r2",
+            "epoch_id": "e1"
+          },
+          "id": "press1"
+        }
+      ],
+      "expected_unique": 2
+    },
+    {
+      "id": "H03",
+      "kind": "delivery_ack_unknown",
+      "state_committed": true,
+      "send_result": "timeout_unknown",
+      "confirmed_retained": null,
+      "expected_next_mode": "full",
+      "expected_new_retained": false
+    },
+    {
+      "id": "H04",
+      "kind": "late_delivery",
+      "host_request_order": [
+        "d-old",
+        "d-new"
+      ],
+      "accepted_delivery_id": "d-new",
+      "incoming_delivery_id": "d-old",
+      "expected_issue": "stale_delivery"
+    },
+    {
+      "id": "H05",
+      "kind": "instruction_publication",
+      "private_task_text": "先开柜再放入杯子",
+      "published_instruction": "打开柜门",
+      "instruction_scope": "current_segment",
+      "segment_id": "s1",
+      "expected_task_text": "打开柜门",
+      "assertions": [
+        "Do not substitute full private task file",
+        "Segment change does not reset all legal memory"
+      ]
+    },
+    {
+      "id": "H06",
+      "kind": "demonstration_role",
+      "observations": [
+        {
+          "id": "demo1",
+          "modality": "video",
+          "reference_id": "demovideo",
+          "role": "demonstration"
+        }
+      ],
+      "demo_actions": 5,
+      "current_executed_actions": 0,
+      "expected_current_executed_actions": 0
+    },
+    {
+      "id": "H07",
+      "kind": "robomme_effective_profile",
+      "action_space": "multi_choice",
+      "raw_include_front_intrinsic": false,
+      "expected_effective_front_intrinsic": true,
+      "actual_calibration_present": false,
+      "expected_geometry_status": "unavailable"
+    },
+    {
+      "id": "H08",
+      "kind": "robomme_depth_units",
+      "raw_depth": 1200,
+      "input_unit": "mm",
+      "output_unit": "m",
+      "expected_depth": 1.2,
+      "assertions": [
+        "Applies only to the pinned HDF5 depth profile, not every online depth export"
+      ]
+    },
+    {
+      "id": "H09",
+      "kind": "features_only",
+      "component": "observation_context",
+      "input": {
+        "features": [
+          {
+            "id": "f1",
+            "claim": "外部已提供的物体描述",
+            "epistemic": "observed",
+            "evidence_refs": [
+              "description"
+            ]
+          }
+        ]
+      },
+      "expected_valid_entry": true
+    },
+    {
+      "id": "H10",
+      "kind": "cross_epoch_delta",
+      "base_scope": {
+        "run_id": "synthetic-design",
+        "task_id": "counting",
+        "epoch_id": "epoch-a",
+        "turn_index": 1
+      },
+      "next_scope": {
+        "run_id": "synthetic-design",
+        "task_id": "counting",
+        "epoch_id": "epoch-b",
+        "turn_index": 2
+      },
+      "expected_next_mode": "full"
+    }
+  ]
+}

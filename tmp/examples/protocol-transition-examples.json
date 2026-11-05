@@ -1,0 +1,374 @@
+{
+  "purpose": "Authored transition contracts, not execution of v1 components. Replay arithmetic is documentation consistency validation only.",
+  "cases": [
+    {
+      "id": "T01",
+      "kind": "state_cas",
+      "current": {
+        "state_id": "design:state:1",
+        "owner": "observation_context",
+        "state_schema_version": "1",
+        "scope": {
+          "run_id": "synthetic-design",
+          "task_id": "counting",
+          "epoch_id": "epoch-a",
+          "turn_index": 1
+        },
+        "bindings": {
+          "memory_policy": "policy:sealed-prefix:v1"
+        },
+        "value": {
+          "stream_id": "button-stream",
+          "sealed_through": 10,
+          "checkpoint_count": 2,
+          "events": [],
+          "coverage": "complete_through_seal"
+        }
+      },
+      "proposal": {
+        "base_state_id": "design:state:1",
+        "state": {
+          "state_id": "design:state:2",
+          "owner": "observation_context",
+          "state_schema_version": "1",
+          "scope": {
+            "run_id": "synthetic-design",
+            "task_id": "counting",
+            "epoch_id": "epoch-a",
+            "turn_index": 2
+          },
+          "bindings": {
+            "memory_policy": "policy:sealed-prefix:v1"
+          },
+          "value": {
+            "stream_id": "button-stream",
+            "sealed_through": 11,
+            "checkpoint_count": 3,
+            "events": [],
+            "coverage": "complete_through_seal"
+          }
+        }
+      },
+      "expected": "accept",
+      "assertions": [
+        "Old state remains immutable",
+        "Duplicate exact proposal is idempotent after acceptance"
+      ]
+    },
+    {
+      "id": "T02",
+      "kind": "state_cas",
+      "current": {
+        "state_id": "design:state:2",
+        "owner": "observation_context",
+        "state_schema_version": "1",
+        "scope": {
+          "run_id": "synthetic-design",
+          "task_id": "counting",
+          "epoch_id": "epoch-a",
+          "turn_index": 2
+        },
+        "bindings": {
+          "memory_policy": "policy:sealed-prefix:v1"
+        },
+        "value": {
+          "stream_id": "button-stream",
+          "sealed_through": 11,
+          "checkpoint_count": 3,
+          "events": [],
+          "coverage": "complete_through_seal"
+        }
+      },
+      "proposal": {
+        "base_state_id": "design:state:1",
+        "state": {
+          "state_id": "design:state:competing",
+          "owner": "observation_context",
+          "state_schema_version": "1",
+          "scope": {
+            "run_id": "synthetic-design",
+            "task_id": "counting",
+            "epoch_id": "epoch-a",
+            "turn_index": 2
+          },
+          "bindings": {
+            "memory_policy": "policy:sealed-prefix:v1"
+          },
+          "value": {
+            "stream_id": "button-stream",
+            "sealed_through": 11,
+            "checkpoint_count": 3,
+            "events": [],
+            "coverage": "complete_through_seal"
+          }
+        }
+      },
+      "expected": "state_conflict",
+      "assertions": [
+        "Do not rebase proposal without recomputation"
+      ]
+    },
+    {
+      "id": "T03",
+      "kind": "checkpoint_count",
+      "sealed_through": 10,
+      "checkpoint_count": 2,
+      "events": [
+        {
+          "sequence": 10,
+          "id": "old",
+          "revision": 0
+        },
+        {
+          "sequence": 11,
+          "id": "e11",
+          "revision": 0
+        },
+        {
+          "sequence": 11,
+          "id": "e11",
+          "revision": 0
+        }
+      ],
+      "expected_count": 3,
+      "expected_complete_through": 11,
+      "assumptions": [
+        "Single trusted stream; closed immutable prefix; seq11 is a unique qualifying event; no gap through11"
+      ]
+    },
+    {
+      "id": "T04",
+      "kind": "checkpoint_count_gap",
+      "sealed_through": 10,
+      "checkpoint_count": 2,
+      "events": [
+        {
+          "sequence": 12,
+          "id": "e12",
+          "revision": 0
+        }
+      ],
+      "expected_status": "incomplete",
+      "expected_complete_through": 10,
+      "assertions": [
+        "Max seen12 cannot advance sealed prefix over missing11",
+        "Do not claim exact whole-stream count"
+      ]
+    },
+    {
+      "id": "T05",
+      "kind": "delivery_reconstruction",
+      "base": {
+        "schema_version": "context.delivery.v1",
+        "delivery_id": "design:delivery:1",
+        "receiver_id": "agent-A",
+        "session_id": "session-A",
+        "mode": "full",
+        "context_ids": [
+          "design:context:count-1"
+        ],
+        "blocks": [
+          {
+            "id": "count",
+            "kind": "text",
+            "text": "已观察到3次独立事件。",
+            "critical": true
+          }
+        ],
+        "scope": {
+          "run_id": "synthetic-design",
+          "task_id": "counting",
+          "epoch_id": "epoch-a",
+          "turn_index": 1
+        }
+      },
+      "delta": {
+        "schema_version": "context.delivery.v1",
+        "delivery_id": "design:delivery:2",
+        "receiver_id": "agent-A",
+        "session_id": "session-A",
+        "mode": "delta",
+        "context_ids": [
+          "design:context:count-2"
+        ],
+        "base_delivery_id": "design:delivery:1",
+        "operations": [
+          {
+            "op": "upsert",
+            "block": {
+              "id": "count",
+              "kind": "text",
+              "text": "更正：先前3次的结论撤销；事件e3被撤回，目前证据支持2次。",
+              "critical": true
+            }
+          }
+        ],
+        "block_order": [
+          "count"
+        ],
+        "scope": {
+          "run_id": "synthetic-design",
+          "task_id": "counting",
+          "epoch_id": "epoch-a",
+          "turn_index": 2
+        }
+      },
+      "expected_full": {
+        "schema_version": "context.delivery.v1",
+        "delivery_id": "design:delivery:2",
+        "receiver_id": "agent-A",
+        "session_id": "session-A",
+        "mode": "full",
+        "context_ids": [
+          "design:context:count-2"
+        ],
+        "blocks": [
+          {
+            "id": "count",
+            "kind": "text",
+            "text": "更正：先前3次的结论撤销；事件e3被撤回，目前证据支持2次。",
+            "critical": true
+          }
+        ],
+        "scope": {
+          "run_id": "synthetic-design",
+          "task_id": "counting",
+          "epoch_id": "epoch-a",
+          "turn_index": 2
+        }
+      },
+      "assertions": [
+        "Same-session confirmed base required",
+        "Explicit correction text required for append-only model history"
+      ]
+    },
+    {
+      "id": "T06",
+      "kind": "delivery_missing_base",
+      "delta": {
+        "schema_version": "context.delivery.v1",
+        "delivery_id": "design:delivery:2",
+        "receiver_id": "agent-A",
+        "session_id": "session-A",
+        "mode": "delta",
+        "context_ids": [
+          "design:context:count-2"
+        ],
+        "base_delivery_id": "design:delivery:1",
+        "operations": [
+          {
+            "op": "upsert",
+            "block": {
+              "id": "count",
+              "kind": "text",
+              "text": "更正：先前3次的结论撤销；事件e3被撤回，目前证据支持2次。",
+              "critical": true
+            }
+          }
+        ],
+        "block_order": [
+          "count"
+        ],
+        "scope": {
+          "run_id": "synthetic-design",
+          "task_id": "counting",
+          "epoch_id": "epoch-a",
+          "turn_index": 2
+        }
+      },
+      "retained": null,
+      "expected_mode": "full",
+      "assertions": [
+        "No standalone delta to new session"
+      ]
+    },
+    {
+      "id": "T07",
+      "kind": "same_step_autoreset",
+      "export": {
+        "slot": "0",
+        "old_epoch": "episode-1",
+        "new_epoch": "episode-2",
+        "terminated": true,
+        "truncated": false,
+        "final_obs": {
+          "position": 1
+        },
+        "returned_observation": {
+          "position": 0
+        }
+      },
+      "expected": {
+        "terminal": {
+          "epoch": "episode-1",
+          "position": 1
+        },
+        "initial": {
+          "epoch": "episode-2",
+          "position": 0
+        }
+      },
+      "assertions": [
+        "No measured displacement from1 to0 attributed to execution"
+      ]
+    },
+    {
+      "id": "T08",
+      "kind": "rlds_last",
+      "step": {
+        "is_last": true,
+        "is_terminal": false,
+        "observation": {
+          "position": 1
+        },
+        "action": [
+          999
+        ],
+        "reward": 999
+      },
+      "expected": {
+        "valid_final_observation": true,
+        "execution_from_last_step": false,
+        "terminal": false
+      },
+      "assertions": [
+        "Last-step placeholder action/reward never used as executed evidence"
+      ]
+    },
+    {
+      "id": "T09",
+      "kind": "tool_failure",
+      "failure": "tool_timeout",
+      "depends_on_result": true,
+      "expected_state_update": null,
+      "expected_status": "unavailable",
+      "assertions": [
+        "Late provider completion cannot advance state"
+      ]
+    },
+    {
+      "id": "T10",
+      "kind": "retraction",
+      "events": [
+        {
+          "source_namespace": "sensor-a",
+          "origin_epoch": "epoch-a",
+          "id": "e1",
+          "revision": 0,
+          "retracted": false
+        },
+        {
+          "source_namespace": "sensor-a",
+          "origin_epoch": "epoch-a",
+          "id": "e1",
+          "revision": 1,
+          "retracted": true
+        }
+      ],
+      "expected_active_count": 0,
+      "assumptions": [
+        "Unsealed complete event window, single identity, no earlier checkpoint contribution"
+      ]
+    }
+  ]
+}
