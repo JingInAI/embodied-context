@@ -8,7 +8,73 @@
 
 它负责准备信息。连接机器人或仿真环境、执行动作、调用任务策略、运行评测和给 agent 发送消息，由接入它的外部系统负责。本文将这个外部系统简称为“调用方”。组件可以调用由调用方明确提供的信息处理工具，但不直接与机器人或仿真环境通信。
 
-可以先看 [执行流程图 PNG](tmp/pipeline/scripts_v1_execution_flow.png) 或 [可放大的 SVG](tmp/pipeline/scripts_v1_execution_flow.svg)。更详细的执行顺序见 [流程说明](../docs/execution-flow.md)。原始组件保留在 `../scripts/`，新版没有修改原目录。
+**项目根目录约定**
+
+本文的“项目根目录”是包含 `pyproject.toml`、`README.md` 和 `context_components/` 的组件仓库根目录。在当前工作区中，它是：
+
+```bash
+cd /root/rivermind-data/project/AgentTest-An/tmp/context_modules/scripts_v1
+```
+
+它不是上一层 `context_modules/`，也不是 `AgentTest-An/`。如果从 GitHub 克隆，根目录通常名为 `embodied-context/`。除首次克隆和进入目录外，后文所有命令、Python 示例和相对文件路径均以这个根目录为基准。
+
+**安装**
+
+需要 Python 3.10 或更新版本。核心依赖只有 `jsonschema` 和 `referencing`，安装时由 pip 处理；不需要先安装机器人仿真器、模型或 GPU 依赖。
+
+如果还没有仓库，先在准备存放项目的位置克隆，并进入仓库根目录；已有当前工作区时跳过这一步：
+
+```bash
+git clone --branch master https://github.com/JingInAI/embodied-context.git
+cd embodied-context
+```
+
+在根目录创建并激活 Python 环境。已有运行调用方的 Conda 或虚拟环境时，直接激活那个环境即可，不必再创建一个：
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+随后安装根目录中的项目：
+
+```bash
+python -m pip install .
+```
+
+如果需要修改源码并立即使用修改后的版本，可以改用可编辑安装：
+
+```bash
+python -m pip install -e .
+```
+
+两种安装方式任选一种。组件需要安装到**调用它的程序使用的同一个 Python 环境**；例如由宿主机上的 AgentTest 调用，就安装到宿主机的 AgentTest 环境中。
+
+验证安装和命令入口：
+
+```bash
+python -m pip show embodied-context-components
+python -B -c 'import sys, context_components; print(sys.executable); print(context_components.__file__)'
+python -B -m context_components --help
+embodied-context --help
+```
+
+安装后无需设置 `PYTHONPATH`。在源码根目录执行 `python -m context_components` 时，Python 会优先使用当前目录的源码；因此，导入位置可能指向本项目，而不是 `site-packages`，这是正常现象。`pip show` 用于确认当前环境确实存在安装记录。
+
+如果只想将 GitHub `master` 作为其他程序的依赖，也可以直接安装远端来源，无需另存源码仓库：
+
+```bash
+python -m pip install --upgrade --force-reinstall \
+  "embodied-context-components @ git+https://github.com/JingInAI/embodied-context.git@master"
+```
+
+此方式还需要 Git 和访问 GitHub、包源的网络连接。`--force-reinstall` 确保同版本的旧本地安装也被替换。远端安装只能获得已经推送到 GitHub 的内容；验证本地尚未推送的改动应使用 `python -m pip install .` 或可编辑安装。远端分支会变化，复现实验时应记录实际提交号：
+
+```bash
+python -B -c 'from importlib.metadata import distribution; print(distribution("embodied-context-components").read_text("direct_url.json"))'
+```
+
+通过 Git URL 安装时，该记录包含仓库地址、请求的 `master` 分支和实际 `commit_id`；本地安装时记录的是本地来源。
 
 **目录怎么分工**
 
@@ -17,53 +83,55 @@
 | `context_components/` | 实际运行的组件代码、输入输出规则和已生成的评测目录。 |
 | `pyproject.toml` | 安装配置；安装包不包含研究资料、测试或样例。 |
 | `README.md` | 使用说明。 |
-| `tmp/` | 非运行资料：研究快照、流程图、样例、测试、生成工具和验收记录。详见 [维护资料说明](tmp/README.md)。 |
+| `tests/` | 当前渲染功能的离线回归测试。 |
+| `tmp/`（历史资料） | `v1` 分支中的研究快照、流程图、样例、旧测试和验收记录；当前 `master` 不包含该目录。 |
 
-正常运行已安装的组件不依赖 `tmp/`。运行本文的文件样例、执行测试或重新生成目录时，才需要其中的相关文件。`.git/` 和 `.gitignore` 属于仓库配置，保留原位置。
+正常安装和下面的入门示例均不依赖 `tmp/`。历史资料可在 [v1 分支](https://github.com/JingInAI/embodied-context/tree/v1/tmp) 查看，包括 [执行流程图 PNG](https://github.com/JingInAI/embodied-context/blob/v1/tmp/pipeline/scripts_v1_execution_flow.png)、[SVG](https://github.com/JingInAI/embodied-context/blob/v1/tmp/pipeline/scripts_v1_execution_flow.svg) 和 [维护资料说明](https://github.com/JingInAI/embodied-context/blob/v1/tmp/README.md)。历史分支不代表当前 `master` 的最新实现。
 
 **先运行一个例子**
 
-需要 Python 3.10 或更新版本。安装时会带上 `jsonschema` 和 `referencing`，它们用于检查输入输出格式。先看终端当前所在目录，再选择下面对应的命令。
-
-**如果已经在 `context_modules/scripts_v1/` 目录中**，可以直接运行：
+以下示例直接从标准输入读取请求，无需准备示例文件。从项目根目录执行，即可生成一份完整的任务上下文 JSON：
 
 ```bash
-PYTHONPATH=. python -B -m context_components task_context \
-  --input tmp/examples/minimal-task.json --format json
-
-PYTHONPATH=. python -B -m context_components spatial_context \
-  --input tmp/examples/projection.json --format text
-
-PYTHONPATH=. python -B -m context_components compose \
-  --input tmp/examples/composition.json --format bundle
+python -B -m context_components task_context --format json <<'JSON'
+{
+  "schema_version": "context.v1",
+  "scope": {
+    "run_id": "example", "task_id": "custom-task",
+    "epoch_id": "scene-1", "turn_index": 0
+  },
+  "input": {
+    "task": {"text": "Explain the order of the observed events.", "kind": "reasoning"}
+  }
+}
+JSON
 ```
 
-需要安装依赖时，在这个目录执行 `python -m pip install .`。
-
-**如果在上一层 `context_modules/` 目录中**，使用下面的完整命令：
+再看一个几何示例：计算同一坐标系中两个点的距离，输出英文说明和 JSON：
 
 ```bash
-python -m pip install ./scripts_v1
-
-# 查看所有组件和命令选项。
-PYTHONPATH=scripts_v1 python -B -m context_components --help
-
-# 根据一条任务说明，生成任务上下文。
-PYTHONPATH=scripts_v1 python -B -m context_components task_context \
-  --input scripts_v1/tmp/examples/minimal-task.json --format json
-
-# 使用样例中的相机参数，计算投影并输出文字。
-PYTHONPATH=scripts_v1 python -B -m context_components spatial_context \
-  --input scripts_v1/tmp/examples/projection.json --format text
-
-# 运行样例中选定的多个组件，生成文字与媒体交付包。
-PYTHONPATH=scripts_v1 python -B -m context_components compose \
-  --input scripts_v1/tmp/examples/composition.json --format bundle
+python -B -m context_components spatial_context \
+  --format text --content-format text_json <<'JSON'
+{
+  "schema_version": "context.v1",
+  "scope": {
+    "run_id": "example", "task_id": "distance-question",
+    "epoch_id": "scene-1", "turn_index": 0
+  },
+  "input": {
+    "frames": [{"id": "map", "length_unit": "m", "handedness": "right"}],
+    "queries": [{
+      "id": "separation", "kind": "distance", "frame_id": "map",
+      "point_a": [0, 0, 0], "point_b": [3, 4, 0]
+    }]
+  }
+}
+JSON
 ```
 
-这些样例可以离线运行，不需要模型、机器人、仿真器或大型任务资产。安装后也可以直接使用 `embodied-context` 命令，它与 `python -m context_components` 是同一入口。
+距离结果为 `5.0 m`。这些示例不调用模型、机器人或仿真器。安装后的 `embodied-context` 与 `python -m context_components` 是同一入口。
 
-`--input` 的相对路径从当前终端目录开始计算。已经进入 `scripts_v1/` 后，再写 `scripts_v1/tmp/examples/...` 就会多拼一层目录，报出 `reference_unavailable`。`PYTHONPATH` 只帮助 Python 找到程序，不会改变输入文件路径。下文涉及 `scripts_v1/...` 或 `docs/verify_documents.py` 的命令和文件示例统一从上一层 `context_modules/` 运行。
+使用文件输入时，`--input request.json` 表示根目录下的 `request.json`，不是 `scripts_v1/request.json`；输出文件路径也遵循同一规则。不要在根目录运行命令时再添加 `scripts_v1/` 前缀。需要在其他目录调用时，应传入相对于那个目录的路径或绝对路径。
 
 **十个组件分别有什么用**
 
@@ -187,24 +255,36 @@ print(packet["blocks"][0]["text"])
 | NVIDIA Isaac Lab Arena：`isaac_lab_arena` | 20 个代码定义 + 85 个 YAML 环境规格 | 区分固定臂、人形、移动操作和顺序任务；记录来源及生效设置，不执行环境创建函数。 |
 | VLABench：`vlabench` | 96 个注册任务 | 区分 6 条策略评测轨道和 6 类视觉语言理解维度；保留公开图像掩码和示例，不转发本题私有答案。 |
 
-这些数字合计 **11,941 条目录身份**，但有的代表任务，有的代表变体、映射行或环境规格，不能当作同粒度任务数或实际运行次数。固定版本、合法模式和目录见 [profiles.json](context_components/adapters/profiles.json)，54 个合成模式样例见 [adapter-examples.json](tmp/examples/adapter-examples.json)。
+这些数字合计 **11,941 条目录身份**，但有的代表任务，有的代表变体、映射行或环境规格，不能当作同粒度任务数或实际运行次数。固定版本、合法模式和目录见 [profiles.json](context_components/adapters/profiles.json)，54 个历史合成模式样例见 [v1 分支中的 adapter-examples.json](https://github.com/JingInAI/embodied-context/blob/v1/tmp/examples/adapter-examples.json)。
 
-下面的代码使用随包提供的合成样例，可以直接在 `context_modules/` 下运行。样例中的图片地址只是占位引用，不是真实照片；未提供感知工具时，观测组件可能报告缺少处理能力。
+下面的代码在项目根目录直接构造一份最小 LIBERO 合成数据，仅演示任务适配，不依赖 `tmp/` 或真实环境。示例从内置目录选择合法身份；真实接入时应使用实际任务和版本，不要为通过检查而替换身份。
 
 ```python
-import json
-from pathlib import Path
 from context_components import compose
-from context_components.adapters.core import adapt, ExportPolicy
+from context_components.adapters.core import adapt, ExportPolicy, profiles
 
-case = json.loads(
-    Path("scripts_v1/tmp/examples/adapter-examples.json").read_text(encoding="utf-8")
-)["examples"][0]
+profile = next(item for item in profiles() if item["adapter"] == "libero")
+task_id = next(item for item in profile["catalog"]["task_ids"]
+               if item.startswith("libero_object:"))
+export = {
+    "schema_version": "context.export.v1",
+    "scope": {"run_id": "example", "task_id": task_id,
+              "epoch_id": "episode-0", "turn_index": 0},
+    "profile": {
+        "benchmark_revision": profile["benchmark_revision"],
+        "export_schema_version": "published-native.v1",
+        "wrapper_revision": "example-exporter-v1",
+        "resolved_configuration_id": "example-config-v1",
+        "mode": "object",
+        "task_id": task_id,
+    },
+    "native": {"instruction": "Inspect the supplied observation before acting."},
+    "references": [],
+}
 
 # 允许读取哪些字段，由调用方明确决定，不能由待处理数据自己扩大。
-policy = ExportPolicy(public_paths=("/instruction", "/observation"))
-adapted = adapt(case["benchmark"], case["export"], policy=policy,
-                components=["task_context", "observation_context"])
+policy = ExportPolicy(public_paths=("/instruction",))
+adapted = adapt("libero", export, policy=policy, components=["task_context"])
 if adapted["issues"]:
     raise ValueError(adapted["issues"])
 
@@ -232,7 +312,7 @@ print(result["status"])
 
 外部合作方的 Arena 环境包或其他自定义目录，可通过 `ExportPolicy.catalog` 提供已核实的任务清单，需要明确 `catalog_id`、`benchmark_revision`、`complete` 和 `task_ids`。工具不会自动发现未来版本或把未知版本当作已验证版本。
 
-两处来源差异保留原貌：VLABench 的 `PhysicalLaw` 与 `PhysicsLaw` 均有上游依据，接收时保留实际拼写；RoboCerebra 的数据目录固定到 `4e386b9aa266f05b199739d7b58950252244ea21`。详细来源、提取方式和异常见 [目录证据](tmp/catalog-evidence.json) 与 [检索记录](tmp/research/lookup.json)。
+两处来源差异保留原貌：VLABench 的 `PhysicalLaw` 与 `PhysicsLaw` 均有上游依据，接收时保留实际拼写；RoboCerebra 的数据目录固定到 `4e386b9aa266f05b199739d7b58950252244ea21`。详细来源、提取方式和异常见 v1 分支的 [目录证据](https://github.com/JingInAI/embodied-context/blob/v1/tmp/catalog-evidence.json) 与 [检索记录](https://github.com/JingInAI/embodied-context/blob/v1/tmp/research/lookup.json)。
 
 **让多个组件合作，并在下一轮继续使用已有记录**
 
@@ -252,6 +332,42 @@ print(result["status"])
 
 `render_context` 接收单组件或组合结果，将它们整理为文字块、资源表和可选媒体块。调用方通过 `audience.modalities` 声明接收方能使用文字、图像、视频或音频中的哪些类型。它不依赖某一家模型 SDK，也不把图片自动翻译成文字描述；纯语言模型需要相应的文字线索或处理工具。
 
+调用方用 `content_format` 选择 agent 看到的内容，十个组件均支持：
+
+| `content_format` | agent 收到的文字块 |
+| --- | --- |
+| `json` | 仅 JSON，保留原先的组件视图，适合自己编排提示词的调用方。 |
+| `text_json`（默认） | 组件专属的英文使用说明 + JSON 数据。 |
+| `text` | 英文使用说明 + 当前数据的分层文字列表，不附 JSON 对象；数值、单位、标识、顺序、空值、问题和限制仍会保留。 |
+
+说明按各组件职责编写，并根据本次结果选择相关内容。每个组件还附带当前字段的英文解释，覆盖关键参数的含义、单位、适用范围和结果限制；未出现的可选字段不附加对应说明。调用方自定义的字段和值原样展示，不擅自赋予机器人或 benchmark 特定含义。例如，空间组件解释像素、射线与空间点的区别；执行反馈区分提交、接受和执行；资源组件区分可执行数量与答案长度；答案组件区分通过、失败和未检查。说明不包含固定机器人、benchmark 或操作步骤，也不会把缺少的事实补成猜测。生成的说明统一为英文；调用方提供的任务文字、证据原文和字段值保留原内容，不自动翻译。
+
+**三种形式都先生成完整的组件 JSON。** `build_context` / `compose` 的结果始终用于上游下游传递和历史状态保存；`render_context` 只生成给 agent 看的表示，不修改结果中的 `content`、`references`、`bindings` 或 `state_update`。展示形式不能代替组件协议，文字输出也不应被重新解析为历史状态。生成 JSON 不等于自动保存文件，保存仍由调用方负责。
+
+```python
+from context_components import build_context
+from context_components.common import dumps
+from context_components.render import render_context
+
+request = {
+    "schema_version": "context.v1",
+    "scope": {"run_id": "example", "task_id": "custom-task",
+              "epoch_id": "scene-1", "turn_index": 0},
+    "input": {"task": {"text": "Explain the order of the observed events.",
+                       "kind": "reasoning"}},
+}
+result = build_context("task_context", request)  # Always generates the full JSON data.
+canonical_json = dumps(result)                 # Retain this for component exchange.
+packet = render_context(result, {
+    "receiver_id": "agent", "session_id": "session-1",
+    "content_format": "text",                 # Or "json" / "text_json".
+    "audience": {"modalities": ["text"]},
+})
+agent_text = "\n".join(b["text"] for b in packet["blocks"] if b["kind"] == "text")
+```
+
+兼容性说明：默认文字块从原来的 JSON 文本变为“英文说明 + JSON”。已有代码若需要对 `block["text"]` 直接解析 JSON，请显式指定 `content_format="json"`；CLI 默认的 `--format json` 仍返回完整原始结果。`language` 如显式提供，仅支持 `en`。新增说明也计入交付的字节或 token 预算，超出预算会报错，不会暗中丢弃关键数据。切换显示形式时，增量交付会更新对应文字块，原始 JSON 和状态不受影响。
+
 默认返回完整包 `full`。只有调用方明确请求增量、提供接收方实际保留的旧包 `retained`，且接收方、会话和任务范围匹配，并声明 `reconstructs_context=true` 时，才会生成只描述变化的 `delta`。接收侧用 `apply_delta` 校验并重建新的完整包；旧包不会被原地改写。缺少有效保留基准时使用完整包；损坏或格式非法的基准仍可能报错，不保证所有错误都会自动回退。
 
 `ReceiverState` 是可选的内存辅助，用来检查提交顺序、拒绝迟到的旧结果并记录接受的包。实际发送失败或超时时，不应调用 `accept` 冒充成功接收。历史状态保存和消息接收确认是两件事；从 JSON 中删掉旧事实，也不会自动删除模型此前收到的消息，调用方需要构建正确的当前上下文。
@@ -265,35 +381,56 @@ print(result["status"])
 | `--input PATH` | 从文件读取请求；`-` 表示从标准输入读取，也是默认值。 |
 | `--output PATH` | 写入一个新文件；`-` 表示输出到终端，也是默认值。已有文件不会被覆盖。 |
 | `--format json` | 输出完整结构化结果，便于后续程序继续处理。 |
-| `--format text` | 只输出交付包中的文字块；需要完整资源表时使用 bundle。 |
+| `--format text` | 只输出交付包中的文字块，内容由 `--content-format` 选择；需要完整资源表时使用 bundle。 |
 | `--format bundle` | 输出文字块、资源表和适用的媒体块，供外部接入层使用。 |
+| `--content-format json\|text_json\|text` | 选择 agent 文字块的内容，默认 `text_json`；配合 `--format text` 或 `--format bundle` 使用。 |
 | `--canonical-output PATH` | 另外保存未经渲染的完整结果；不能与主输出使用相同路径。 |
 | `--resource-root`、`--resource-map` | 一起提供，指定允许读取的文件根目录和资源名称到相对路径的 JSON 映射。 |
 | `--receiver-id`、`--session-id` | 标明交付给谁、属于哪个会话。 |
 | `adapt --benchmark … --public-paths …` | 选择评测并从调用方提供的 JSON 文件读取允许公开的字段路径；只输出计划，不自动执行组件。 |
 | `--components`、`--catalog` | 适配时选择组件，或从文件提供额外的冻结目录。 |
 
+例如，只向 agent 输出英文说明，同时保存供组件间和历史轮次使用的完整 JSON（输出路径必须尚不存在）：
+
+```bash
+python -B -m context_components task_context \
+  --format text --content-format text \
+  --output agent-context.txt --canonical-output component-result.json <<'JSON'
+{"schema_version":"context.v1","scope":{"run_id":"example","task_id":"custom-task","epoch_id":"scene-1","turn_index":0},"input":{"task":{"text":"Explain the order of the observed events.","kind":"reasoning"}}}
+JSON
+```
+
+将 `--content-format text` 换为 `json` 或 `text_json`，只改变 agent 的文字文件；完整 JSON 仍由 `--canonical-output` 单独保存。`--format bundle` 的外层始终为 JSON 交付协议，选择“仅文字”指其中发送给 agent 的文字块，不会把交付协议也变成散文。
+
 CLI 不会根据请求中的工具名字自动加载执行代码；要注入实际处理器，使用 Python API。高级增量交付通过 Python API 使用，CLI 的 text/bundle 路径默认生成完整包。命令行写文件采用“创建新文件”的方式避免覆盖；同时输出多个文件时不保证它们全部一起成功。遇到处理错误时输出 `context.error.v1` 并退出码 2，错误说明包含原因及可定位的位置。
 
 **验证结果和继续查阅**
 
-当前 [验证报告](tmp/validation-report.json) 记录了 Python 3.10.22、3.11.15、3.12.3 各通过 35 项测试，以及全部目录身份的适配检查。报告绑定对应代码摘要；代码变化后，需要重新验证，不能继续引用旧报告作为新代码的证明。Python 3.10 的汇总状态根据实际环境记录生成，没有运行记录时标为 `not_run`。
-
-测试使用合成输入、固定目录、临时文件和模拟的信息处理器，验证格式转换、引用、状态、数学计算、文件读取和交付行为。**没有进行真实导出数据回放或模型、仿真、真机评测**，因此不证明视觉识别质量、任务成功率或实际效率已经提升。没有 tokenizer 时也不宣称测得 token 节省。
+本次英文说明和三种显示形式的离线回归测试位于 `tests/test_render_presentation.py`。从本目录运行：
 
 ```bash
-# 只运行新版组件测试。
-PYTHONPATH=scripts_v1 python -B -m unittest discover -s scripts_v1/tmp/tests -v
-
-# 运行验收并更新报告，包括原 scripts 未变化的摘要检查。
-python -B scripts_v1/tmp/verify_release.py
-
-# 检查设计文档、来源和原目录完整性。
-python -B docs/verify_documents.py --implementation
+python -B -m unittest discover -s tests -v
 ```
 
-需要精确接入字段时，查看 [输入输出与状态规则](context_components/schemas/)；需要设计依据时，查看 [实施记录](../docs/implementation.md)、[规格](../docs/spec.md) 和 [计划](../docs/plan.md)。[finalize_schemas.py](tmp/finalize_schemas.py) 记录设计到实现阶段对嵌套字段的收紧，[build_catalogs.py](tmp/build_catalogs.py) 根据固定资料生成目录；它们是维护工具，不是每次调用必须运行的步骤。
+测试覆盖十个组件、三种显示形式、完整 JSON 的保留、上下游传递、历史状态、媒体引用、增量交付、精度和预算。`v1` 分支中的历史验收报告不代表本次改动已完成模型或机器人评测。
 
-旧版 107 项测试的保留、调整和退役映射见 [test-migration.json](tmp/test-migration.json)。映射表不等于旧版所有断言都原样通过：固定组件流水线、固定一次修复和自动控制补偿已退役；新版测试验证候选不被改写、未知值、数值精度、执行阶段、来源和路径保护等行为。
+历史 [验证报告](https://github.com/JingInAI/embodied-context/blob/v1/tmp/validation-report.json) 记录了当时 Python 3.10.22、3.11.15、3.12.3 各通过 35 项测试，以及全部目录身份的适配检查。报告绑定当时的代码摘要，不能作为后来改动的验证证明。
 
-运行包只需要核心代码、schemas 和适配目录。研究快照、设计文档、生成工具和样例不作为安装后的运行依赖，也不把各评测的模型和仿真依赖装入核心组件。
+测试使用合成输入、固定目录、临时文件和模拟的信息处理器，验证格式转换、引用、状态、数学计算、文件读取和交付行为。没有进行真实模型、仿真或真机评测，因此不证明任务成功率或实际效率已经提升。
+
+下面是**可选的历史维护命令**，不是安装或普通调用步骤。仅在原始 `context_modules/scripts_v1/` 工作区中，且已经具备完整的 `tmp/`、`../docs/`、`../scripts/` 及维护工具要求的来源文件时使用；独立克隆当前 `master` 后不能直接运行这些命令。路径仍以组件项目根目录为基准：
+
+```bash
+# 运行 tmp 中的历史组件测试。
+python -B -m unittest discover -s tmp/tests -v
+
+# 运行原工作区的验收工具并更新报告；需要历史资料及相邻设计目录。
+python -B tmp/verify_release.py
+
+# 检查原工作区的设计文档、来源和原组件完整性。
+python -B ../docs/verify_documents.py --implementation
+```
+
+精确接入字段见 [输入输出与状态规则](context_components/schemas/)。原工作区还保留 `../docs/implementation.md`、`../docs/spec.md`、`../docs/plan.md` 和旧版 `../scripts/`；它们不属于独立组件仓库的安装内容。
+
+历史维护工具包括 [finalize_schemas.py](https://github.com/JingInAI/embodied-context/blob/v1/tmp/finalize_schemas.py) 和 [build_catalogs.py](https://github.com/JingInAI/embodied-context/blob/v1/tmp/build_catalogs.py)。旧版测试的保留、调整与退役记录见 [test-migration.json](https://github.com/JingInAI/embodied-context/blob/v1/tmp/test-migration.json)。这些资料不作为安装后的运行依赖，也不会将各评测的模型和仿真依赖装入核心组件。
