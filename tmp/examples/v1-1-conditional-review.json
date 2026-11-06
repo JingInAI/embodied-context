@@ -1,0 +1,118 @@
+{
+  "schema_version": "context.compose.v1",
+  "scope": {
+    "run_id": "example",
+    "task_id": "review-report",
+    "epoch_id": "revision-1",
+    "turn_index": 0
+  },
+  "nodes": [
+    {
+      "id": "observations",
+      "component": "observation_context",
+      "request": {
+        "schema_version": "context.v1",
+        "scope": {
+          "run_id": "example",
+          "task_id": "review-report",
+          "epoch_id": "revision-1",
+          "turn_index": 0
+        },
+        "input": {
+          "features": [
+            {
+              "id": "candidate_supported",
+              "claim": true,
+              "epistemic": "observed",
+              "evidence_refs": [
+                "review-receipt"
+              ]
+            },
+            {
+              "id": "independent_reviews",
+              "claim": 1,
+              "epistemic": "observed",
+              "evidence_refs": [
+                "review-receipt"
+              ]
+            }
+          ]
+        },
+        "references": [
+          {
+            "id": "review-receipt",
+            "media_type": "application/json",
+            "inline": {
+              "candidate": "draft-1",
+              "supported": true,
+              "reviews": 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "task",
+      "component": "task_context",
+      "request": {
+        "schema_version": "context.v1",
+        "scope": {
+          "run_id": "example",
+          "task_id": "review-report",
+          "epoch_id": "revision-1",
+          "turn_index": 0
+        },
+        "input": {
+          "task": {
+            "text": "Assess whether the supplied report is ready for publication.",
+            "kind": "reasoning"
+          },
+          "decision_rules": [
+            {
+              "id": "review-before-rewrite",
+              "when": {
+                "all": [
+                  {
+                    "fact_id": "candidate_supported",
+                    "equals": true
+                  },
+                  {
+                    "fact_id": "independent_reviews",
+                    "operator": "lt",
+                    "value": 2
+                  }
+                ]
+              },
+              "recommendation": "Retain the supported candidate while obtaining the remaining independent review.",
+              "evidence_refs": [
+                "review-policy"
+              ],
+              "next_check": "Check candidate support and the independent review count.",
+              "example_reference_id": "example-review"
+            }
+          ]
+        },
+        "references": [
+          {
+            "id": "review-policy",
+            "media_type": "application/json",
+            "inline": {
+              "required_independent_reviews": 2,
+              "policy_version": "example-only"
+            }
+          },
+          {
+            "id": "example-review",
+            "media_type": "application/json",
+            "inline": {
+              "description": "A previous draft retained supported content pending independent review."
+            }
+          }
+        ]
+      },
+      "upstream_nodes": [
+        "observations"
+      ]
+    }
+  ]
+}

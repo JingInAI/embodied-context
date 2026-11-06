@@ -1,0 +1,116 @@
+{
+  "schema_version": "v1-1.validation.1",
+  "generated_at": "2026-11-06T15:25:47.929567+00:00",
+  "branch": "v1-1",
+  "baseline_commit": "289a721cb1d866846b6b4a3597847ae07e02074d",
+  "python": "3.12.14",
+  "runtime_benchmarks_executed": false,
+  "tests": {
+    "command": "python -B -m unittest discover -s tmp/tests -v",
+    "result": "passed",
+    "count": 105,
+    "baseline_count": 79,
+    "new_count": 26,
+    "duration_seconds": 23.53,
+    "log": "tmp/v1-1-tests.log",
+    "log_sha256": "19aebc487257080501ce715c623e331a4c3cf5e9b113538c87b5ae00675407ed"
+  },
+  "checks": {
+    "schema_regeneration": "byte-identical",
+    "schema_sha256": {
+      "context_components/schemas/component-payload.schema.json": "f960f6d2c6bf512143a8b97b61018c440a0e3ef8db0eedb7c7efe601081ca4da",
+      "context_components/schemas/state-values.schema.json": "83692294d032e06cb3d631d62861d3d8883df9a3797cc4920929e1c2e0a80dac"
+    },
+    "python310_syntax": {
+      "result": "passed",
+      "files": 36,
+      "method": "ast.parse(feature_version=(3,10)); not Python 3.10 runtime execution"
+    },
+    "git_diff_check": "passed",
+    "generic_examples": "three examples exercised by offline tests",
+    "new_dependencies": false,
+    "component_count": 10
+  },
+  "render_measurements": [
+    {
+      "example": "tmp/examples/v1-1-conditional-review.json",
+      "delivery_format": "text_json",
+      "unit": "UTF-8 bytes of complete delivery packet",
+      "full": 10594,
+      "concise": 5262,
+      "reduction_percent": 50.33
+    },
+    {
+      "example": "tmp/examples/v1-1-sparse-response.json",
+      "delivery_format": "text_json",
+      "unit": "UTF-8 bytes of complete delivery packet",
+      "full": 4931,
+      "concise": 2757,
+      "reduction_percent": 44.09
+    },
+    {
+      "example": "tmp/examples/v1-1-external-outcomes.json",
+      "delivery_format": "text_json",
+      "unit": "UTF-8 bytes of complete delivery packet",
+      "full": 3989,
+      "concise": 2203,
+      "reduction_percent": 44.77
+    }
+  ],
+  "measurement_limits": [
+    "Synthetic examples only; not model token measurements, latency or task success improvements.",
+    "Complete UTF-8 delivery packets include all data and resource references; values depend on payload and rendering options."
+  ],
+  "source_manifest_sha256": "264601d84a2e38419f9cfae12a5e37a9e777073a197ea5d7629ae1e49da48678",
+  "source_files_sha256": {
+    "context_components/__init__.py": "0adf162041d7dc509ebf63200320ad9285f5ecc7a8d2b80733068ec8e011dcd7",
+    "context_components/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "context_components/adapters/__init__.py": "fb3848032264563edb92c3973cf598756e63caa47beda45215bfd88a56447e05",
+    "context_components/adapters/core.py": "32f96119fc85fe0308cee64befbc3cb3d89cf97555e7b3e70ab65b0e1cb2a949",
+    "context_components/adapters/isaac_lab_arena.py": "bf779d9dd5a8deceda6b8299fd04da1ce9ef8c38b4944dc0a5b8f22b9252e89d",
+    "context_components/adapters/libero.py": "51829c063edbff7361edf6252e7105519cc6a937898774c803a5791023cdbded",
+    "context_components/adapters/libero_plus.py": "d19575a07ff94300d5c81b15014d8e346c6c66c22830f8b46950a657103ede5e",
+    "context_components/adapters/libero_pro.py": "67e88a47a9f87069caa06bf4227554c48cd3f0ee35fc9a9d735082a33ec5542c",
+    "context_components/adapters/metaworld.py": "e27430e13512e37303c29ef47d44e23f36533b5ee4254c93653a0ec8d5e49e64",
+    "context_components/adapters/profiles.json": "29955ed6a75f15540f13e0cb2a52991c6e302fc179659ce4abcc2ef16d580869",
+    "context_components/adapters/robocasa365.py": "6d1dfbc45f67af9c9a4aca91c76fddf55ad810e23f3270572d103f6e02e215c5",
+    "context_components/adapters/robocerebra.py": "a39c767e1f76b1acced9357b78af6a15df1a751bee3116828edc88ba1d510fb5",
+    "context_components/adapters/robodojo.py": "164a8bac9f6982b3957223a1631214a30bfdfb24ab3b08163c8796980d2c3eb4",
+    "context_components/adapters/robomme.py": "7c8f5e9f10185b770f3b9a0178ccd552c22243c2a24effe37fa1200456586861",
+    "context_components/adapters/robotwin2.py": "a97d7f9eafcce500feca4e2d7e7c1e826d525cf9dbd54aaa34e28ba782889eb4",
+    "context_components/adapters/transitions.py": "71f88436c532e4b632c5f3e886d79fe3d5eaae2473b7e79f6b34a512e8ab9458",
+    "context_components/adapters/vlabench.py": "93d26f3ac7be6fb1722968d3a7022c082f918dad920af2be9eb1c7318da74cf8",
+    "context_components/api.py": "a0e047447439f471f4c3662ef638e43b23739802df15ac89addeab2f93b765ec",
+    "context_components/cli.py": "e86bc5bbbb8994e91911895d67bccc8c9aacd130f3ae3b99456f35b0df29a847",
+    "context_components/common.py": "6d82572aed0fdd0917ffade44feaeb31cdfc46334a7dfbdc253751f29388ab39",
+    "context_components/components/__init__.py": "fb3848032264563edb92c3973cf598756e63caa47beda45215bfd88a56447e05",
+    "context_components/components/evidence_context.py": "91f95548582b28e98106c034c01d030e452c8bb19334c4f52cca5089723b0d57",
+    "context_components/components/execution_feedback.py": "6b458ba0a296328aa7492ce528b2f2a6851606403cb3b9a93deadbe765eebe57",
+    "context_components/components/interaction_contract.py": "96faf93a00b887573f483d374d6d729420e37c850e21023217ae5b64c5dc2677",
+    "context_components/components/observation_context.py": "9f17b798a80ff2208aa59942d87b8c30a4f004f285d20957bf38f20af01ed112",
+    "context_components/components/output_contract.py": "5a521854b874f599493d1b9ca987110d81a0b7847f94b1efda095db88f33a924",
+    "context_components/components/resource_context.py": "e1a0d381681499941609b0e88310d1ed67509ff6ef5462914b648d4cd966a567",
+    "context_components/components/response_evidence.py": "db319d6ff11c2b283b1d3d26e9a4d4090c3ecb2db632a6bf4ace11055ff2ac56",
+    "context_components/components/spatial_context.py": "c14344b5688db92b9cbf97bbec936ae577956bbfdaf97f450677fa0dca61faec",
+    "context_components/components/task_context.py": "7f16471daad1bd3cf394e98e065b8bc57286988445d1caaa42368cdaee98780a",
+    "context_components/components/tool_context.py": "3647b938fa0aeebb8ee4227bf849f8e83a003408338dc37d3c4d4155f86d69b8",
+    "context_components/memory.py": "c710edfab18aa7400faa25ccbc1cd5d2ed2d8393f45ece8315a0d254a57f89ef",
+    "context_components/presentation.py": "887d74445f87f1f3b1b6eca66c21d72305c2f459af856091b9a4b4ccbbf86074",
+    "context_components/render.py": "41ccaa0c895c2617d6abc8e9f67e2a71b326d525eec320d6557d5e1634c211e9",
+    "context_components/schemas/component-payload.schema.json": "f960f6d2c6bf512143a8b97b61018c440a0e3ef8db0eedb7c7efe601081ca4da",
+    "context_components/schemas/protocol.schema.json": "7ccc96e3e136730f8b85ac66826c3efb80648a5ea742e2fd49dbd805e705010e",
+    "context_components/schemas/state-values.schema.json": "83692294d032e06cb3d631d62861d3d8883df9a3797cc4920929e1c2e0a80dac",
+    "context_components/task_modes.py": "8e12f5559d125f66dc9008cfbc1d036f46752644420a091f2712bf94e0e6ad01",
+    "tmp/examples/v1-1-conditional-review.json": "b1ba5279ed4e41ef7f7842833485d8282892d2490c1d92888809dd8abcc45ace",
+    "tmp/examples/v1-1-external-outcomes.json": "9905b7e0e4dc220fc11655b80e9716ef7b31886768636c0fc0df4d4085075b95",
+    "tmp/examples/v1-1-sparse-response.json": "14503d3c46ed9cae1389c1b6b1644eee469f1730ac540a1582dba5ad3a267ae6",
+    "tmp/finalize_schemas.py": "a8128f33d287b236badc024f0d58c970b5e4f8bd998c76cdd25a6bfc73833926",
+    "tmp/tests/test_adapters.py": "d466a63aedc85302f50e03f61149a0e82593849472d8fe39836892de4874659d",
+    "tmp/tests/test_components.py": "5aa144869eef33596ddf8b296236f5423c053359cd008703302b671c510a1570",
+    "tmp/tests/test_guidance_workflows.py": "4c27a5508a6026f11761361c2bd73b79a359f0aa5e0a5eda4bc96fc0441b0ef9",
+    "tmp/tests/test_integration.py": "bdd5b26515a44c9a96a7a0eb6d5f4b26c0278f5918ab60816a2a27bf03ece3f6",
+    "tmp/tests/test_render_presentation.py": "60828ea454747a891a10c457bdae3c99a0202bffc37c59b98dfd357e6c824a2c",
+    "tmp/tests/test_task_modes.py": "a5a70b67301062345ba28efb97f71370cde3a785201b3cbdeeb5055cf9518b26",
+    "tmp/tests/test_v11_components.py": "4cd74ce3917bdedc81f11efc90a057741da9ea909440fd20442f4c76a9c05fc5"
+  }
+}

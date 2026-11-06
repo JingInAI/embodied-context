@@ -11,11 +11,12 @@ def run(inv):
     incoming=[]
     for execution in executions:
         incoming.append(dict(id=execution['id'],source_namespace=execution.get('source_namespace','published-execution'),
-                             revision=execution.get('revision',0),execution=execution,evidence_refs=execution.get('evidence_refs',[]),
+                             revision=execution.get('revision',0),execution=execution,evidence_refs=list(dict.fromkeys(execution.get('evidence_refs', []) +
+                                 execution.get('outcome', {}).get('evidence_refs', []))),
                              **{k:execution[k] for k in ('scope','origin_epoch','retracted') if k in execution}))
     records,complete=merge(inv,old.get('records',[]),incoming,old.get('complete_set',True))
     executions=[r['execution'] for r in records if not r.get('retracted')]
-    segments=[];changes=[];failures=[];unknown=[]
+    segments=[];changes=[];failures=[];unknown=[];outcomes=[]
     for item in executions:
         receipt={}
         for rid in item.get('evidence_refs',[]):
@@ -24,6 +25,8 @@ def run(inv):
                 if receipt and not equal(receipt,value):fail('conflicting_revision','Execution receipts disagree')
                 receipt=value
         row=dict(id=item['id'],status=item['status'],evidence_refs=item.get('evidence_refs',[]))
+        if 'outcome' in item:
+            outcomes.append(dict(execution_id=item['id'], **copy.deepcopy(item['outcome'])))
         for key in ('entity_id','request_id','started_at','ended_at','termination'):
             if key in item:row[key]=item[key]
         counts={}
@@ -58,6 +61,7 @@ def run(inv):
         segments.append(row)
     content=dict(segments=segments)
     if changes:content['changes']=changes
+    if outcomes:content['outcomes']=outcomes
     if failures:content['failures']=failures
     if unknown:content['unknowns']=unknown
     return inv.finish(content,state=state(inv,records,complete_set=complete) if records or old else None)

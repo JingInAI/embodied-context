@@ -211,6 +211,68 @@
                   },
                   "retracted": {
                     "type": "boolean"
+                  },
+                  "outcome": {
+                    "type": "object",
+                    "properties": {
+                      "category": {
+                        "enum": [
+                          "task_evaluation",
+                          "execution_failure",
+                          "infrastructure_failure",
+                          "interruption",
+                          "unknown"
+                        ]
+                      },
+                      "evaluation_status": {
+                        "enum": [
+                          "complete",
+                          "partial",
+                          "not_run",
+                          "unknown"
+                        ]
+                      },
+                      "task_success": {
+                        "type": "boolean"
+                      },
+                      "reason": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "evidence_refs": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "minItems": 1
+                      }
+                    },
+                    "required": [
+                      "category",
+                      "evaluation_status",
+                      "evidence_refs"
+                    ],
+                    "additionalProperties": false,
+                    "allOf": [
+                      {
+                        "if": {
+                          "required": [
+                            "task_success"
+                          ]
+                        },
+                        "then": {
+                          "properties": {
+                            "category": {
+                              "const": "task_evaluation"
+                            },
+                            "evaluation_status": {
+                              "const": "complete"
+                            }
+                          }
+                        }
+                      }
+                    ]
                   }
                 },
                 "required": [
@@ -535,6 +597,32 @@
           },
           "required": [
             "not"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "fact_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "operator": {
+              "enum": [
+                "lt",
+                "le",
+                "gt",
+                "ge"
+              ]
+            },
+            "value": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "fact_id",
+            "operator",
+            "value"
           ],
           "additionalProperties": false
         }

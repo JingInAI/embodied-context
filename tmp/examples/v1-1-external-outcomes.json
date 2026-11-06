@@ -1,0 +1,70 @@
+{
+  "schema_version": "context.v1",
+  "scope": {
+    "run_id": "example",
+    "task_id": "review-report",
+    "epoch_id": "revision-1",
+    "turn_index": 0
+  },
+  "input": {
+    "executions": [
+      {
+        "id": "job-1",
+        "status": "complete",
+        "submitted": {
+          "items": 4
+        },
+        "executed": {
+          "items": 4
+        },
+        "outcome": {
+          "category": "task_evaluation",
+          "evaluation_status": "complete",
+          "task_success": false,
+          "reason": "Independent check found incomplete output.",
+          "evidence_refs": [
+            "evaluation"
+          ]
+        }
+      },
+      {
+        "id": "job-2",
+        "status": "interrupted",
+        "submitted": {
+          "items": 4
+        },
+        "executed": {
+          "items": 2
+        },
+        "outcome": {
+          "category": "infrastructure_failure",
+          "evaluation_status": "not_run",
+          "reason": "External processor became unavailable after two confirmed items.",
+          "evidence_refs": [
+            "failure"
+          ]
+        }
+      }
+    ]
+  },
+  "references": [
+    {
+      "id": "evaluation",
+      "media_type": "application/json",
+      "inline": {
+        "job": "job-1",
+        "complete": true,
+        "success": false
+      }
+    },
+    {
+      "id": "failure",
+      "media_type": "application/json",
+      "inline": {
+        "job": "job-2",
+        "executed_items": 2,
+        "evaluation": "not_run"
+      }
+    }
+  ]
+}

@@ -14,6 +14,77 @@ def array(item):return dict(type='array',items=item)
 def ref(name):return {'$ref':'#/$defs/'+name}
 
 
+def extend_v11(defs):
+    """Add opt-in v1-1 fields; legacy inputs and state shapes remain valid."""
+    evidence = array(STRING)
+    evidence['minItems'] = 1
+    defs['condition']['oneOf'].append(obj({
+        'fact_id': STRING, 'operator': {'enum': ['lt', 'le', 'gt', 'ge']}, 'value': NUMBER}))
+    rule = obj({'id': STRING, 'when': ref('condition'), 'recommendation': STRING,
+                'evidence_refs': evidence, 'max_age_turns': {'type': 'integer', 'minimum': 0},
+                'required_bindings': {'$ref': COMMON+'bindings'}, 'next_check': STRING,
+                'example_reference_id': STRING}, ['id', 'when', 'recommendation', 'evidence_refs'])
+    defs['task_context_input']['properties']['decision_rules'] = array(rule)
+    defs['task_context_output']['properties']['decision_support'] = array(obj({
+        'id': STRING, 'status': {'enum': ['applicable', 'not_applicable', 'unresolved']},
+        'condition_result': {'type': ['boolean', 'null']}, 'evaluated_condition': ref('condition'),
+        'evidence_refs': evidence, 'recommendation': STRING, 'next_check': STRING,
+        'example_reference_id': STRING, 'limitations': array(STRING),
+        'max_age_turns': {'type': 'integer', 'minimum': 0},
+        'required_bindings': {'$ref': COMMON+'bindings'}},
+        ['id', 'status', 'condition_result', 'evaluated_condition', 'evidence_refs', 'limitations']))
+    advice = defs['task_context_output']['properties']['decision_support']['items']
+    advice['oneOf'] = [
+        {'properties': {'status': {'const': 'applicable'}, 'condition_result': {'const': True}},
+         'required': ['recommendation'], 'not': {'required': ['next_check']}},
+        {'properties': {'status': {'const': 'not_applicable'}, 'condition_result': {'const': False}},
+         'not': {'anyOf': [{'required': [key]} for key in ('recommendation', 'example_reference_id', 'next_check')]}},
+        {'properties': {'status': {'const': 'unresolved'}, 'condition_result': {'type': 'null'}},
+         'not': {'anyOf': [{'required': [key]} for key in ('recommendation', 'example_reference_id')]}}]
+    query = defs['response_evidence_input']['properties']['query']
+    query['properties']['kind']['enum'].append('describe')
+    query['properties']['ratios'] = array(obj({'id': STRING, 'input': STRING,
+                                              'response': STRING, 'min_abs_input': POSITIVE}))
+    query['allOf'].append({'if': {'properties': {'kind': {'const': 'describe'}}},
+                           'then': {'not': {'anyOf': [{'required': [k]} for k in
+                              ('inputs', 'radius', 'distance_scale', 'candidates',
+                               'half_life_seconds', 'max_residual_rms')]}}})
+    query['allOf'].append({'if': {'required': ['ratios']},
+                           'then': {'properties': {'kind': {'const': 'describe'}}}})
+    statistic = obj({'variable': STRING, 'role': {'enum': ['input', 'response']},
+                     'unit': STRING, 'sample_count': {'type': 'integer', 'minimum': 1},
+                     'minimum': NUMBER, 'maximum': NUMBER, 'mean': NUMBER,
+                     'evidence_refs': array(STRING)})
+    ratio = obj({'id': STRING, 'record_id': STRING, 'input': STRING, 'response': STRING,
+                 'numerator_unit': STRING, 'denominator_unit': STRING,
+                 'status': {'enum': ['ready', 'unavailable']}, 'value': NUMBER,
+                 'reason': STRING, 'evidence_refs': array(STRING)},
+                ['id', 'record_id', 'input', 'response', 'numerator_unit',
+                 'denominator_unit', 'status', 'evidence_refs'])
+    ratio['oneOf'] = [
+        {'properties': {'status': {'const': 'ready'}}, 'required': ['value'],
+         'not': {'required': ['reason']}},
+        {'properties': {'status': {'const': 'unavailable'}}, 'required': ['reason'],
+         'not': {'required': ['value']}}]
+    defs['response_evidence_output']['properties']['descriptive'] = obj({
+        'statistics': array(statistic), 'ratios': array(ratio),
+        'method': obj({'id': STRING, 'version': STRING}), 'conditions': {'type': 'object'},
+        'coverage_complete': {'type': 'boolean'}, 'missing_values': array(obj({
+            'record_id': STRING, 'variable': STRING})), 'limitations': array(STRING)})
+    outcome = obj({'category': {'enum': ['task_evaluation', 'execution_failure',
+                                        'infrastructure_failure', 'interruption', 'unknown']},
+                   'evaluation_status': {'enum': ['complete', 'partial', 'not_run', 'unknown']},
+                   'task_success': {'type': 'boolean'}, 'reason': STRING, 'evidence_refs': evidence},
+                  ['category', 'evaluation_status', 'evidence_refs'])
+    outcome['allOf'] = [{'if': {'required': ['task_success']}, 'then': {'properties': {
+        'category': {'const': 'task_evaluation'}, 'evaluation_status': {'const': 'complete'}}}}]
+    defs['execution_feedback_input']['properties']['executions']['items']['properties']['outcome'] = outcome
+    result_outcome = obj({'execution_id': STRING, **outcome['properties']},
+                         ['execution_id', *outcome['required']])
+    result_outcome['allOf'] = outcome['allOf']
+    defs['execution_feedback_output']['properties']['outcomes'] = array(result_outcome)
+
+
 def main():
     p=PATH/'component-payload.schema.json';schema=json.loads(p.read_text());defs=schema['$defs']
     condition={'oneOf':[
@@ -48,6 +119,7 @@ def main():
         'version':STRING,'input_refs':array(STRING),'output_refs':array(STRING),'issues':array({'$ref':COMMON+'issue'})},['call_id','tool_id','status','version','input_refs']))
     execution=defs['execution_feedback_input']['properties']['executions']['items']['properties']
     for phase in ('submitted','accepted','executed'):execution[phase]=obj({'items':{'type':'integer','minimum':0},'evidence_refs':array(STRING)},['items'])
+    extend_v11(defs)
     p.write_text(json.dumps(schema,ensure_ascii=False,indent=2)+'\n')
     state_defs={
         'records':array({'type':'object'}),'references':array({'$ref':COMMON+'reference'}),'complete_set':{'type':'boolean'},

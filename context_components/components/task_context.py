@@ -1,6 +1,7 @@
 import copy
+from decimal import Decimal
 
-from ..common import equal, fail, unique
+from ..common import equal, fail, same_scope, unique
 from ..memory import restore
 
 
@@ -17,7 +18,84 @@ def condition(expr,facts):
         values=facts.get(expr['fact_id'],[])
         if not values or any(not equal(v,values[0]) for v in values):return None
         return equal(values[0],expr['equals'])
-    fail('invalid_request','Condition must be all/any/not or fact_id+equals')
+    if set(expr) == {'fact_id', 'operator', 'value'}:
+        values = facts.get(expr['fact_id'], [])
+        if not values or any(not equal(v, values[0]) for v in values):
+            return None
+        value = values[0]
+        if isinstance(value, bool) or not isinstance(value, (int, float, Decimal)):
+            return None
+        threshold = expr['value']
+        return {'lt': lambda: value < threshold, 'le': lambda: value <= threshold,
+                'gt': lambda: value > threshold, 'ge': lambda: value >= threshold}[expr['operator']]()
+    fail('invalid_request', 'Unsupported condition')
+
+
+def condition_ids(expr):
+    """Collect only explicitly named predicates; never interpret free text."""
+    if 'fact_id' in expr:
+        return {expr['fact_id']}
+    if 'not' in expr:
+        return condition_ids(expr['not'])
+    return set().union(*(condition_ids(child) for child in expr.get('all', expr.get('any', []))))
+
+
+def decision_support(inv, rules):
+    """Evaluate supplied advice against current evidence, without retaining rules."""
+    unique(rules)
+    results = []
+    for rule in rules:
+        needed = condition_ids(rule['when'])
+        facts, refs, invalidated = {}, [], set()
+        for upstream in inv.upstream:
+            if upstream['component'] != 'observation_context':
+                continue
+            for bucket in ('entities', 'relations', 'events'):
+                for index, claim in enumerate(upstream['content'].get(bucket, [])):
+                    if claim['id'] not in needed:
+                        continue
+                    origin = claim.get('scope', upstream['scope'])
+                    age = inv.scope['turn_index'] - origin['turn_index']
+                    if not same_scope(origin, inv.scope) or age > rule.get('max_age_turns', 0):
+                        continue
+                    if claim.get('retracted'):
+                        invalidated.add(claim['id'])
+                    elif claim['epistemic'] in ('observed', 'derived') and claim['evidence_refs']:
+                        facts.setdefault(claim['id'], []).append(claim['claim'])
+                    else:
+                        # An uncertain alternative is not discarded to manufacture certainty.
+                        invalidated.add(claim['id'])
+                    refs.append(inv.bind_upstream(upstream, f'/content/{bucket}/{index}'))
+        for name in invalidated:
+            facts.pop(name, None)
+        value = condition(rule['when'], facts)
+        required = rule.get('required_bindings', {})
+        actual = inv.request.get('bindings', {})
+        mismatch = any(k in actual and not equal(v, actual[k]) for k, v in required.items())
+        missing = any(k not in actual for k in required)
+        if mismatch:
+            value = False
+        elif missing and value is not False:
+            value = None
+        limits = ['Applicability of caller-supplied advice only; not authorization, a new plan, or task success.',
+                  'Only supported predicates within the declared turn age are used; unmodeled conditions remain unchecked.']
+        if missing:
+            limits.append('One or more required configuration bindings are missing.')
+        if mismatch:
+            limits.append('Required configuration bindings differ.')
+        result = dict(id=rule['id'], status='applicable' if value is True else
+                      'not_applicable' if value is False else 'unresolved', condition_result=value,
+                      evaluated_condition=copy.deepcopy(rule['when']), limitations=limits,
+                      max_age_turns=rule.get('max_age_turns', 0), required_bindings=copy.deepcopy(required),
+                      evidence_refs=list(dict.fromkeys(rule['evidence_refs'] + refs)))
+        if value is True:
+            result['recommendation'] = rule['recommendation']
+            if 'example_reference_id' in rule:
+                result['example_reference_id'] = rule['example_reference_id']
+        elif value is None and 'next_check' in rule:
+            result['next_check'] = rule['next_check']
+        results.append(result)
+    return results
 
 
 def run(inv):
@@ -78,6 +156,8 @@ def run(inv):
     active=next((g['id'] for g in goals if g['status'] in ('active','pending','attempted')),None)
     content=dict(requirements=requirements,active_focus=focus[0] if focus else active or task['text'],open_questions=questions)
     if goals:content['goals']=goals
+    if 'decision_rules' in inp:
+        content['decision_support'] = decision_support(inv, inp['decision_rules'])
     state=None
     if goals:
         used={r for g in goals for r in g.get('evidence_refs',[])}
