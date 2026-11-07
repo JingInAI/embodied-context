@@ -3,7 +3,7 @@ import copy
 import hashlib
 
 from .common import at, dumps, equal, fail, same_scope, uid, unique, validate
-from .presentation import CONTENT_FORMATS, render_error, render_view
+from .presentation import CONTENT_FORMATS, EXPLANATION_DETAILS, render_error, render_view
 
 
 def check_packet(packet):
@@ -45,14 +45,19 @@ def render_context(result, delivery_request, *, sources=None, tokenizers=None):
 
     content_format selects json, text_json (default), or text for agent-facing
     blocks only. Retain result for downstream components and history in all modes.
-    Generated explanations are English; quoted source data is not translated.
+    explanation_detail selects full tutorials (default) or concise guidance;
+    neither choice removes data. Generated explanations are English; quoted
+    source data is not translated.
     """
-    allowed={'mode','audience','budget','retained','receiver_id','session_id','reconstructs_context','language','content_format'}
+    allowed={'mode','audience','budget','retained','receiver_id','session_id','reconstructs_context','language','content_format','explanation_detail'}
     if set(delivery_request)-allowed:fail('invalid_request','Unknown render request field')
     if delivery_request.get('mode','full') not in ('full','delta'):fail('invalid_request','Unknown delivery mode')
     if not {'receiver_id','session_id'}<=delivery_request.keys():fail('invalid_request','Render request needs receiver_id and session_id')
     content_format=delivery_request.get('content_format','text_json')
     if content_format not in CONTENT_FORMATS:fail('invalid_request','Unknown content_format; use json, text_json or text')
+    explanation_detail = delivery_request.get('explanation_detail', 'full')
+    if explanation_detail not in EXPLANATION_DETAILS:
+        fail('invalid_request', 'Unknown explanation_detail; use full or concise')
     if delivery_request.get('language','en')!='en':fail('invalid_request','Generated explanations are available in English (en) only')
     audience=delivery_request.get('audience',{'modalities':['text']});validate(audience,'audience')
     if result['schema_version']=='context.composed.v1':
@@ -69,7 +74,7 @@ def render_context(result, delivery_request, *, sources=None, tokenizers=None):
         view=dict(component=context['component'],status=context['status'],content=context['content'])
         for key in ('task','issues','guidance'):
             if key in context:view[key]=context[key]
-        blocks.append(dict(id=node['id']+':context',kind='text',text=render_view(context,view,content_format),critical=True))
+        blocks.append(dict(id=node['id']+':context',kind='text',text=render_view(context,view,content_format,explanation_detail),critical=True))
         aliases=[]
         for reference in context.get('references',[]):
             ref=copy.deepcopy(reference)

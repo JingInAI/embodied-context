@@ -37,9 +37,99 @@ def contains_origin(points):
     return False
 
 
+def describe(inv, variables, rows, content, update, complete):
+    """Report measured sample summaries; do not fit, extrapolate or rank inputs."""
+    query = inv.input['query']
+    pairs = query.get('ratios', [])
+    unique(pairs)
+    if any(v.get('role') not in ('input', 'response') for v in variables.values()):
+        fail('invalid_request', 'Descriptive variables require explicit input/response roles')
+    for pair in pairs:
+        if (variables.get(pair['input'], {}).get('role') != 'input' or
+                variables.get(pair['response'], {}).get('role') != 'response'):
+            fail('invalid_request', 'Ratio requires a declared input and response variable')
+    if 'max_age_seconds' in query and 'now' not in query:
+        fail('invalid_request', 'Descriptive age filtering needs an explicit current time')
+    selected = []
+    for row in rows:
+        reason = None
+        if not row['evidence_refs']:
+            reason = 'missing_evidence'
+        elif 'max_age_seconds' in query:
+            if 'time' not in row:
+                reason = 'missing_time'
+            else:
+                age = elapsed(row['time'], query['now'])
+                if age < 0 or age > query['max_age_seconds']:
+                    reason = 'outside_time_window'
+        if reason:
+            content['support']['excluded'].append(dict(id=row['id'], reason=reason))
+        else:
+            selected.append(row)
+    content['support']['valid_samples'] = len(selected)
+    statistics, ratios, missing = [], [], []
+    values = {}
+    for name, variable in variables.items():
+        samples, refs = [], []
+        bucket = 'inputs' if variable['role'] == 'input' else 'responses'
+        for row in selected:
+            if name not in row[bucket]:
+                missing.append(dict(record_id=row['id'], variable=name))
+                continue
+            try:
+                value = float(row[bucket][name])
+            except (OverflowError, ValueError):
+                fail('invalid_request', 'Descriptive sample is outside finite numeric range')
+            if not math.isfinite(value):
+                fail('invalid_request', 'Descriptive sample must be finite')
+            values[(row['id'], name)] = value
+            samples.append(value)
+            refs.extend(row['evidence_refs'])
+        if samples:
+            # Normalize before summing: dividing each huge value by count can
+            # still overflow fsum through rounding (e.g. three float maxima).
+            scale = max(abs(value) for value in samples)
+            mean = scale * (math.fsum(value / scale for value in samples) / len(samples)) if scale else 0.0
+            statistics.append(dict(variable=name, role=variable['role'], unit=variable['unit'],
+                sample_count=len(samples), minimum=min(samples), maximum=max(samples), mean=mean,
+                evidence_refs=list(dict.fromkeys(refs))))
+    for pair in pairs:
+        for row in selected:
+            denominator = values.get((row['id'], pair['input']))
+            numerator = values.get((row['id'], pair['response']))
+            item = dict(id=pair['id'], record_id=row['id'], input=pair['input'], response=pair['response'],
+                        numerator_unit=variables[pair['response']]['unit'],
+                        denominator_unit=variables[pair['input']]['unit'],
+                        evidence_refs=row['evidence_refs'], status='unavailable')
+            if denominator is None or numerator is None:
+                item['reason'] = 'missing_paired_value'
+            elif abs(denominator) < pair['min_abs_input']:
+                item['reason'] = 'denominator_below_supplied_threshold'
+            else:
+                value = numerator / denominator
+                if math.isfinite(value):
+                    item.update(status='ready', value=value)
+                else:
+                    item['reason'] = 'ratio_outside_finite_numeric_range'
+            ratios.append(item)
+    limits = [
+        'Retrospective descriptions of received executed records, not predictions or causal gains.',
+        'Ratios retain the supplied aggregation and units; they do not recover ordering, delay, or unmeasured conditions.',
+        'Coverage describes the retained received set, not all activity in the world. No minimum sample count implies generalization.',
+    ]
+    content['descriptive'] = dict(statistics=statistics, ratios=ratios,
+        method=dict(id='descriptive_executed_records', version='1'), conditions=inv.input['conditions'],
+        coverage_complete=complete, missing_values=missing, limitations=limits)
+    content['limitations'].extend(limits)
+    if missing or any(item['status'] == 'unavailable' for item in ratios) or not statistics:
+        inv.issue('insufficient_observations', 'Some requested descriptions lack usable measured values')
+    return inv.finish(content, status='unavailable' if not statistics else
+                      'partial' if inv.issues else 'ready', state=update)
+
+
 def run(inv):
     inp=inv.input;variables=unique(inp['variables']);q=inp['query']
-    if q.get('kind') not in ('support','estimate','compare_candidates'):fail('unsupported_operator','Unknown response query')
+    if q.get('kind') not in ('support','estimate','compare_candidates','describe'):fail('unsupported_operator','Unknown response query')
     old=restore(inv)
     incoming=[dict(id=r['id'],source_namespace=r.get('source_namespace','published-response'),revision=r.get('revision',0),
                    record=r,evidence_refs=r.get('evidence_refs',[]),**{k:r[k] for k in ('scope','origin_epoch','retracted') if k in r}) for r in inp['records']]
@@ -59,6 +149,7 @@ def run(inv):
     unique(rows)
     content=dict(support=dict(valid_samples=len(rows),excluded=excluded),estimates=[],limitations=[])
     if q['kind']=='support':return inv.finish(content,state=update)
+    if q['kind']=='describe':return describe(inv, variables, rows, content, update, complete)
     input_ids=[v['id'] for v in inp['variables'] if v.get('role')=='input']
     response_ids=[v['id'] for v in inp['variables'] if v.get('role')=='response']
     if not input_ids or not response_ids:fail('invalid_request','Estimation variables need input/response roles')

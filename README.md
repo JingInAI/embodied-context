@@ -332,6 +332,26 @@ python -B -m context_components spatial_context \
 
 标准 JSON 和历史状态中的类型元数据始终保留，和 `json` / `text_json` / `text` 显示形式独立。旧输入继续兼容；固定旧版的严格 JSON 消费端需要同步升级协议，才能接收新增的可选 `task` 元数据。这些新增字段和说明同样计入预算。
 
+**v1-1：通用经验、证据和精简说明**
+
+本分支保持十个组件的分工，把迭代经验转成四项可选扩展。任务组件接收调用方的
+`decision_rules`，结合当前有来源、时效和配置匹配的事实，输出条件建议是否适用；
+不自动移植历史策略。响应证据组件增加 `query.kind="describe"`，用单样本或稀疏
+记录提供描述统计和显式请求的比值，预测仍需满足原有联合支持条件。执行反馈可
+接收 `outcome`，分别保留外部任务评估、基础设施故障和中断信息，不把缺失评估
+转换成任务失败。
+
+渲染层新增 `explanation_detail="concise"`（CLI：`--explanation-detail concise`），
+对十个组件提供各自的简短使用说明。它保留全部实际数据与引用，只缩短教学文字；
+默认 `full`，超出预算仍明确报错。这些扩展均由调用方显式启用，旧输入和旧状态
+继续可用。使用新字段时，严格旧消费方需同步升级 schema。
+
+完整参数、返回字段、三值条件、状态与兼容性边界见
+[v1-1 使用说明](tmp/v1-1-usage.md)；经验归纳和职责判断见
+[设计记录](tmp/v1-1-design.md)。三个通用示例覆盖报告审核、处理耗时描述和
+外部作业评估；本分支没有内置特定任务的坐标、动作、模型或控制阈值。
+独立[验证报告](tmp/v1-1-validation.json)只记录离线合同验证，不声称模型成功率提升。
+
 **让多个组件合作，并在下一轮继续使用已有记录**
 
 `compose` 接收调用方明确列出的节点和依赖。例如，让“观测与记忆”先整理事实，再让“任务与进度”据此判断完成条件：在后一个节点的 `upstream_nodes` 中写入前一个节点 ID 即可。系统会先检查所有节点的输入格式、身份和依赖是否存在循环，再按依赖顺序串行运行，把上游结果放入下游请求的 `upstream`。
@@ -421,6 +441,7 @@ agent_text = "\n".join(b["text"] for b in packet["blocks"] if b["kind"] == "text
 | `--format text` | 只输出交付包中的文字块，内容由 `--content-format` 选择；需要完整资源表时使用 bundle。 |
 | `--format bundle` | 输出文字块、资源表和适用的媒体块，供外部接入层使用。 |
 | `--content-format json\|text_json\|text` | 选择 agent 文字块的内容，默认 `text_json`；配合 `--format text` 或 `--format bundle` 使用。 |
+| `--explanation-detail full\|concise` | 选择完整或精简的组件专属说明，默认 full；配合 text/bundle，实际数据与引用完整保留。 |
 | `--canonical-output PATH` | 另外保存未经渲染的完整结果；不能与主输出使用相同路径。 |
 | `--resource-root`、`--resource-map` | 一起提供，指定允许读取的文件根目录和资源名称到相对路径的 JSON 映射。 |
 | `--receiver-id`、`--session-id` | 标明交付给谁、属于哪个会话。 |
@@ -443,7 +464,7 @@ CLI 不会根据请求中的工具名字自动加载执行代码；要注入实�
 
 **验证结果和继续查阅**
 
-全部离线测试统一放在 `tmp/tests/`，其中 `test_render_presentation.py` 覆盖字段解释和三种显示形式，`test_guidance_workflows.py` 检查各组件的任务指导及状态切换，`test_task_modes.py` 检查类型传播、内容选择、冲突和历史兼容性。从包含该目录的 `v1` 项目根目录运行：
+全部离线测试统一放在 `tmp/tests/`，其中 `test_v11_components.py` 覆盖条件建议、稀疏统计、外部评估分类、精简交付及边界；`test_render_presentation.py` 覆盖字段解释和三种显示形式，`test_guidance_workflows.py` 检查各组件的任务指导及状态切换，`test_task_modes.py` 检查类型传播、内容选择、冲突和历史兼容性。从包含该目录的 `v1` 项目根目录运行：
 
 ```bash
 python -B -m unittest discover -s tmp/tests -v

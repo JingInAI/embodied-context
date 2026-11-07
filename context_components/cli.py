@@ -9,7 +9,7 @@ from .api import build_context,compose
 from .common import COMPONENTS,ContextError,FileResolver,Services,dumps,fail,loads
 from .adapters.core import ExportPolicy,adapt
 from .render import render_context
-from .presentation import CONTENT_FORMATS
+from .presentation import CONTENT_FORMATS, EXPLANATION_DETAILS
 
 
 def write_new(path, text):
@@ -35,6 +35,8 @@ def main(argv=None):
     parser.add_argument('--format',choices=['json','text','bundle'],default='json')
     parser.add_argument('--content-format',choices=CONTENT_FORMATS,
                         help='Agent text: JSON, English explanation + JSON (default), or English explanation with data; requires --format text or bundle')
+    parser.add_argument('--explanation-detail', choices=EXPLANATION_DETAILS,
+                        help='Full (default) or concise explanations; preserves all data and requires text or bundle output')
     parser.add_argument('--canonical-output')
     parser.add_argument('--resource-root');parser.add_argument('--resource-map')
     parser.add_argument('--benchmark');parser.add_argument('--public-paths');parser.add_argument('--catalog')
@@ -42,8 +44,8 @@ def main(argv=None):
     parser.add_argument('--receiver-id',default='cli');parser.add_argument('--session-id',default='standalone')
     args=parser.parse_args(argv)
     try:
-        if args.content_format is not None and args.format=='json':
-            fail('invalid_request','--content-format requires --format text or bundle; --format json is always the canonical result')
+        if (args.content_format is not None or args.explanation_detail is not None) and args.format=='json':
+            fail('invalid_request','--content-format/--explanation-detail requires --format text or bundle; --format json is always the canonical result')
         if args.input!='-':
             path=Path(args.input).absolute()
             request=loads(FileResolver(path.parent,{'input':path.name})({'uri':'input'}).data)
@@ -63,7 +65,7 @@ def main(argv=None):
         canonical=dumps(result)+'\n'
         if args.format=='json':text=canonical
         else:
-            packet=render_context(result,dict(receiver_id=args.receiver_id,session_id=args.session_id,content_format=args.content_format or 'text_json',audience=dict(modalities=['text'] if args.format=='text' else ['text','image','video','audio'])))
+            packet=render_context(result,dict(receiver_id=args.receiver_id,session_id=args.session_id,content_format=args.content_format or 'text_json',explanation_detail=args.explanation_detail or 'full',audience=dict(modalities=['text'] if args.format=='text' else ['text','image','video','audio'])))
             text=dumps(packet)+'\n' if args.format=='bundle' else '\n'.join(b.get('text','') for b in packet['blocks'])+'\n'
         if args.canonical_output:
             if args.canonical_output==args.output:fail('invalid_request','Canonical and rendered output paths must differ')
